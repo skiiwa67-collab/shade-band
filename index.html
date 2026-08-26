@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#050708">
+<meta name="color-scheme" content="dark">
+<title>SHADE BAND</title>
+<style>
+  :root{
+    --energy:#3DFF8A;
+    --energy-dim:rgba(61,255,138,.18);
+    --dead:#FF3B3B;
+    --dead-dim:rgba(255,59,59,.16);
+    --diesel:#FFB020;
+    --diesel-dim:rgba(255,176,32,.16);
+    --data:#3EE0D4;
+    --data-dim:rgba(62,224,212,.14);
+    --ink:#F3F6F4;
+    --muted:#8B9894;
+    --line:rgba(255,255,255,.10);
+    --glass:rgba(5,8,10,.62);
+    --glass-hard:rgba(5,8,10,.82);
+    --nav-h:72px;
+    --pack:1;
+    --sans:"Segoe UI Variable","Segoe UI","SF Pro Display","Helvetica Neue",system-ui,sans-serif;
+    --mono:"Cascadia Code","Cascadia Mono","SF Mono","Consolas","ui-monospace",monospace;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html,body{margin:0;height:100%;background:#050708;color:var(--ink);
+    font-family:var(--sans);overflow:hidden;user-select:none;}
+  button{appearance:none;-webkit-appearance:none;background:none;border:0;padding:0;cursor:pointer;font:inherit;color:inherit;}
+
+  #bg{position:fixed;inset:0;z-index:0;
+    background:
+      linear-gradient(rgba(62,224,212,.035) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(62,224,212,.035) 1px, transparent 1px),
+      #050708;
+    background-size:28px 28px, 28px 28px, auto;}
+  #veil{position:fixed;inset:0;z-index:1;pointer-events:none;
+    background:
+      radial-gradient(90% 70% at 50% 28%, rgba(62,224,212,.06), transparent 55%),
+      linear-gradient(180deg, rgba(0,0,0,.35) 0%, transparent 16%, transparent 62%, rgba(0,0,0,.78) 100%);}
+  #grain{position:fixed;inset:0;z-index:2;pointer-events:none;opacity:.05;mix-blend-mode:overlay;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)' opacity='.55'/></svg>");}
+  .frame{position:fixed;z-index:3;pointer-events:none;width:18px;height:18px;border:1.5px solid rgba(62,224,212,.35);}
+  .frame.tl{top:8px;left:8px;border-right:0;border-bottom:0;}
+  .frame.tr{top:8px;right:8px;border-left:0;border-bottom:0;}
+  .frame.bl{bottom:calc(var(--nav-h) + env(safe-area-inset-bottom,0px) - 4px);left:8px;border-right:0;border-top:0;}
+  .frame.br{bottom:calc(var(--nav-h) + env(safe-area-inset-bottom,0px) - 4px);right:8px;border-left:0;border-top:0;}
+  #beatbar{position:fixed;top:0;left:0;right:0;height:2px;z-index:20;background:rgba(255,255,255,.06);}
+  #beatbar>i{display:block;height:100%;width:0;background:var(--data);box-shadow:0 0 10px var(--data);}
+
+  #stage{position:relative;z-index:10;height:100dvh;height:100vh;
+    overflow:hidden;display:flex;flex-direction:column;
+    padding:calc(10px + env(safe-area-inset-top,0px)) 14px calc(var(--nav-h) + env(safe-area-inset-bottom,0px)) 14px;
+    gap:calc(8px * var(--pack));}
+  #chrome{display:flex;align-items:baseline;gap:10px;min-height:28px;flex:0 0 auto;}
+  #chrome .brand{font-family:var(--mono);font-size:12px;letter-spacing:.18em;font-weight:700;
+    text-transform:uppercase;white-space:nowrap;}
+  #chrome .grow{flex:1;}
+  #chrome .est,#chrome .rev{font-family:var(--mono);font-size:10px;letter-spacing:.12em;color:var(--muted);white-space:nowrap;}
+  #chrome .clk{font-family:var(--mono);font-size:11px;font-variant-numeric:tabular-nums;}
+
+  #deck{flex:1 1 auto;min-height:0;position:relative;overflow:hidden;}
+  .beat{position:absolute;inset:0;display:none;overflow:hidden;
+    grid-template-columns:1fr;grid-template-rows:auto 1fr;gap:calc(12px * var(--pack));
+    align-content:start;}
+  .beat.on{display:grid;}
+  .hero{min-width:0;}
+  .kicker{font-family:var(--mono);font-size:calc(11px * var(--pack));letter-spacing:.2em;
+    text-transform:uppercase;color:var(--data);margin:0 0 calc(8px * var(--pack));}
+  .hero h1{margin:0;font-weight:650;letter-spacing:-.035em;line-height:.96;
+    font-size:calc(clamp(1.7rem,6.4vw,3.6rem) * var(--pack));
+    text-transform:uppercase;text-wrap:balance;white-space:pre-line;}
+  .hero h1.ask{text-transform:none;letter-spacing:-.03em;
+    font-size:calc(clamp(1.45rem,5.6vw,2.8rem) * var(--pack));line-height:1.02;}
+  .hero h1.flood{color:var(--dead);font-family:var(--mono);letter-spacing:.04em;
+    font-size:calc(clamp(1.6rem,6vw,3.1rem) * var(--pack));}
+  .hero h1.code{font-family:var(--mono);letter-spacing:.18em;text-transform:none;
+    font-size:calc(clamp(3.2rem,16vw,7rem) * var(--pack));line-height:.85;
+    display:flex;align-items:center;gap:.28em;}
+  .swatch{width:calc(28px * var(--pack));height:calc(28px * var(--pack));
+    border:1px solid rgba(255,176,32,.7);background:var(--diesel);
+    box-shadow:0 0 18px rgba(255,176,32,.45);flex:0 0 auto;}
+  .sub{margin:calc(10px * var(--pack)) 0 0;font-size:calc(clamp(.92rem,2.2vw,1.18rem) * var(--pack));
+    line-height:1.35;max-width:46ch;text-wrap:balance;}
+  .sub b{color:var(--energy);font-weight:650;}
+  .tagmark{font-family:var(--mono);font-size:.72em;letter-spacing:.1em;color:var(--muted);}
+
+  .plate{min-height:0;overflow:auto;background:var(--glass);border:1px solid var(--line);
+    backdrop-filter:blur(16px) saturate(1.25);-webkit-backdrop-filter:blur(16px) saturate(1.25);
+    padding:calc(11px * var(--pack)) calc(12px * var(--pack));border-radius:2px;}
+  .plate h3{margin:0 0 calc(8px * var(--pack));font-family:var(--mono);font-size:calc(10px * var(--pack));
+    letter-spacing:.16em;text-transform:uppercase;color:var(--data);font-weight:600;}
+  .badge{display:inline-block;font-family:var(--mono);font-size:9px;letter-spacing:.14em;
+    padding:2px 6px;border:1px solid rgba(62,224,212,.4);color:var(--data);margin-left:6px;vertical-align:1px;}
+  .badge.warn{border-color:rgba(255,176,32,.45);color:var(--diesel);}
+  .badge.dead{border-color:rgba(255,59,59,.45);color:var(--dead);}
+  .badge.ok{border-color:rgba(61,255,138,.4);color:var(--energy);}
+  .badge.open{border-color:rgba(255,176,32,.4);color:var(--diesel);}
+
+  .jobs{display:grid;grid-template-columns:1fr 1fr;gap:calc(8px * var(--pack));margin-top:calc(12px * var(--pack));}
+  .job{border:1px solid var(--line);padding:calc(10px * var(--pack));background:rgba(0,0,0,.28);}
+  .job.hi{border-color:rgba(61,255,138,.32);background:rgba(61,255,138,.06);}
+  .job.em{border-color:rgba(255,59,59,.32);background:rgba(255,59,59,.06);}
+  .job .lab{font-family:var(--mono);font-size:calc(10px * var(--pack));letter-spacing:.16em;color:var(--data);margin:0 0 6px;}
+  .job.em .lab{color:var(--dead);}
+  .job .val{font-family:var(--mono);font-size:calc(clamp(1.05rem,2.6vw,1.35rem) * var(--pack));
+    letter-spacing:-.02em;line-height:1.15;font-weight:650;}
+  .job p{margin:6px 0 0;font-size:calc(12.5px * var(--pack));line-height:1.35;color:var(--ink);}
+
+  .tblock{margin-top:calc(12px * var(--pack));border:1px solid rgba(62,224,212,.22);
+    background:rgba(5,8,10,.55);padding:calc(8px * var(--pack)) calc(10px * var(--pack));}
+  .tblock .cap{display:flex;justify-content:space-between;gap:8px;margin:0 0 6px;
+    font-family:var(--mono);font-size:calc(8px * var(--pack));letter-spacing:.14em;color:var(--muted);}
+  .tblock .cap b{color:var(--energy);font-weight:600;}
+  .row{display:grid;grid-template-columns:78px 1fr;gap:8px;align-items:baseline;
+    font-size:calc(12.5px * var(--pack));line-height:1.4;margin:3px 0;}
+  .row .k{font-family:var(--mono);font-size:calc(10px * var(--pack));letter-spacing:.08em;color:var(--muted);}
+  .row .k.reg{color:var(--energy);}
+  .row .k.open{color:var(--diesel);}
+  .row .k.kill{color:var(--dead);}
+  .row .v{color:var(--ink);}
+  .note{margin:8px 0 0;font-family:var(--mono);font-size:calc(10px * var(--pack));
+    color:var(--muted);letter-spacing:.04em;line-height:1.4;}
+
+  .cabs{display:flex;gap:4px;align-items:flex-end;margin-top:calc(12px * var(--pack));
+    padding:8px 6px;border:1px solid var(--line);background:rgba(0,0,0,.28);overflow:hidden;}
+  .cab{flex:1 1 0;min-width:0;height:calc(36px * var(--pack));
+    clip-path:polygon(18% 0,82% 0,100% 100%,0 100%);
+    background:rgba(255,255,255,.07);border:0;position:relative;opacity:.45;}
+  .cab.on{background:linear-gradient(180deg,rgba(255,176,32,.75),rgba(255,176,32,.2));
+    opacity:1;box-shadow:0 0 16px rgba(255,176,32,.35);}
+  .cab.on::after{content:"K7Q2";position:absolute;left:0;right:0;top:4px;text-align:center;
+    font-family:var(--mono);font-size:calc(7px * var(--pack));letter-spacing:.12em;color:#161616;font-weight:700;}
+  .cabcap{font-family:var(--mono);font-size:calc(8px * var(--pack));letter-spacing:.12em;
+    color:var(--muted);margin:4px 2px 0;display:flex;justify-content:space-between;}
+
+  .draw{border:1px solid var(--line);background:rgba(0,0,0,.34);padding:8px;}
+  .draw svg{width:100%;height:auto;display:block;}
+  .dlab{display:flex;justify-content:space-between;gap:8px;margin:0 0 6px;
+    font-family:var(--mono);font-size:calc(8px * var(--pack));letter-spacing:.14em;color:var(--muted);}
+  .dlab b{color:var(--energy);}
+
+  .cols3{display:grid;grid-template-columns:1fr;gap:calc(8px * var(--pack));}
+  .col{border:1px solid var(--line);padding:calc(9px * var(--pack));background:rgba(0,0,0,.28);}
+  .col.win{border-color:rgba(61,255,138,.32);background:rgba(61,255,138,.05);}
+  .col.lose{border-color:rgba(255,59,59,.28);opacity:.92;}
+  .col .lab{font-family:var(--mono);font-size:calc(10px * var(--pack));letter-spacing:.14em;margin:0 0 6px;}
+  .col.win .lab{color:var(--energy);}
+  .col.lose .lab{color:var(--dead);}
+  .col ul{margin:0;padding:0 0 0 1.1em;font-size:calc(12.5px * var(--pack));line-height:1.4;}
+  .col li{margin:3px 0;}
+
+  .steps{display:flex;flex-direction:column;gap:0;}
+  .step{display:grid;grid-template-columns:18px 1fr;gap:8px;}
+  .step .mark{display:flex;flex-direction:column;align-items:center;}
+  .step .dot{width:9px;height:9px;border-radius:50%;background:var(--data);flex:0 0 9px;margin-top:4px;
+    box-shadow:0 0 8px rgba(62,224,212,.45);}
+  .step.live .dot{background:var(--energy);box-shadow:0 0 8px var(--energy);}
+  .step .stem{width:1px;flex:1;min-height:10px;background:linear-gradient(180deg,rgba(62,224,212,.55),rgba(62,224,212,.12));}
+  .step:last-child .stem{display:none;}
+  .step .body{padding:0 0 10px;}
+  .step .nm{font-family:var(--mono);font-size:calc(12px * var(--pack));letter-spacing:.1em;text-transform:uppercase;}
+  .step.live .nm{color:var(--energy);}
+  .step .ds{font-size:calc(12.5px * var(--pack));line-height:1.35;color:var(--muted);margin-top:2px;}
+
+  .kills{display:grid;grid-template-columns:1fr;gap:calc(6px * var(--pack));}
+  .kill{display:grid;grid-template-columns:92px 1fr;gap:8px;padding:calc(7px * var(--pack)) 8px;
+    border:1px solid rgba(255,59,59,.22);background:rgba(255,59,59,.05);}
+  .kill .k{font-family:var(--mono);font-size:calc(10px * var(--pack));letter-spacing:.1em;color:var(--dead);}
+  .kill .v{font-size:calc(13px * var(--pack));line-height:1.35;}
+
+  .floodmock{margin-top:calc(10px * var(--pack));border:1px solid rgba(255,59,59,.4);
+    background:rgba(255,59,59,.08);padding:calc(10px * var(--pack));
+    font-family:var(--mono);letter-spacing:.18em;text-align:center;color:var(--dead);
+    font-size:calc(clamp(.85rem,2.4vw,1.15rem) * var(--pack));line-height:1.55;}
+
+  .dwgfoot{flex:0 0 auto;display:flex;flex-wrap:wrap;gap:8px 14px;
+    font-family:var(--mono);font-size:calc(9px * var(--pack));letter-spacing:.1em;color:var(--muted);
+    padding-top:2px;}
+  .dwgfoot b{color:var(--ink);font-weight:600;}
+
+  #transport{position:fixed;left:0;right:0;bottom:0;z-index:30;
+    display:flex;align-items:center;gap:8px;min-height:var(--nav-h);
+    padding:8px 14px calc(10px + env(safe-area-inset-bottom,0px));
+    background:linear-gradient(180deg,rgba(5,8,10,0) 0%,rgba(5,8,10,.82) 22%,rgba(5,8,10,.96) 100%);
+    border-top:1px solid var(--line);
+    backdrop-filter:blur(16px) saturate(1.2);-webkit-backdrop-filter:blur(16px) saturate(1.2);}
+  #transport .btns{display:flex;gap:6px;flex:1 1 auto;}
+  #transport button{font-family:var(--mono);font-size:12px;letter-spacing:.14em;
+    min-height:44px;min-width:72px;padding:0 12px;border:1px solid rgba(255,255,255,.16);
+    background:rgba(5,8,10,.7);color:var(--ink);flex:1;}
+  #transport button:hover{border-color:var(--data);color:var(--data);}
+  #transport button:focus-visible{outline:2px solid var(--data);outline-offset:2px;}
+  #play[aria-pressed="true"]{border-color:var(--energy);color:var(--energy);}
+  .dots{display:flex;gap:5px;margin-left:6px;align-items:center;flex:0 0 auto;}
+  .dots i{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.22);}
+  .dots i.on{background:var(--data);box-shadow:0 0 6px var(--data);}
+  .bname{margin-left:auto;font-family:var(--mono);font-size:10px;letter-spacing:.12em;
+    text-transform:uppercase;color:var(--muted);white-space:nowrap;flex:0 0 auto;}
+
+  #boot{position:fixed;inset:0;z-index:40;background:#050708;display:flex;flex-direction:column;
+    align-items:center;justify-content:center;gap:10px;transition:opacity .5s ease;}
+  #boot.off{opacity:0;pointer-events:none;}
+  #boot .b{font-family:var(--mono);letter-spacing:.28em;font-size:13px;font-weight:700;}
+  #boot .s{font-family:var(--mono);font-size:10px;letter-spacing:.2em;color:var(--data);text-transform:uppercase;}
+
+  .beat.compact .pack-hide,
+  .beat.compact .note{display:none;}
+  .beat.compact .jobs,
+  .beat.compact .cabs{margin-top:8px;}
+
+  @media (min-width:860px) and (orientation:landscape){
+    #stage{padding:calc(16px + env(safe-area-inset-top,0px)) 22px calc(var(--nav-h) + env(safe-area-inset-bottom,0px)) 22px;}
+    .beat{grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);grid-template-rows:1fr;align-items:stretch;}
+    .beat.why{grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);}
+    .hero h1{font-size:calc(clamp(2.1rem,4.6vw,3.8rem) * var(--pack));}
+    .hero h1.ask{font-size:calc(clamp(1.7rem,3.6vw,2.9rem) * var(--pack));}
+    .hero h1.code{font-size:calc(clamp(4.2rem,9vw,7.2rem) * var(--pack));}
+    .cols3{grid-template-columns:1fr 1fr 1fr;}
+    .kills{grid-template-columns:1fr 1fr;}
+    #transport{padding-left:22px;padding-right:22px;}
+  }
+  @media (max-width:859px),(orientation:portrait){
+    html,body{height:auto;min-height:100%;overflow:auto;}
+    #stage{height:auto;min-height:100dvh;min-height:100vh;overflow:visible;}
+    #deck{overflow:visible;flex:1 1 auto;}
+    .beat{position:relative;inset:auto;overflow:visible;}
+    .jobs{grid-template-columns:1fr 1fr;}
+    .cabs,.cabcap{display:none;}
+    .tblock{margin-top:10px;}
+    .hero h1.ask{font-size:clamp(1.35rem,7vw,2.1rem);}
+    #chrome{flex-wrap:wrap;row-gap:2px;}
+    #chrome .brand{font-size:10px;letter-spacing:.12em;}
+    .bname{display:none;}
+    .kill{grid-template-columns:1fr;gap:2px;}
+  }
+  @media (max-width:380px){
+    #chrome .est{display:none;}
+    .dots{display:none;}
+    .row{grid-template-columns:1fr;gap:1px;}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *{transition-duration:.01ms!important;}
+    #beatbar>i{box-shadow:none;}
+  }
+</style>
+</head>
+<body>
+<div id="beatbar"><i id="beatfill"></i></div>
+<div id="bg"></div>
+<div id="veil"></div>
+<div id="grain"></div>
+<i class="frame tl"></i><i class="frame tr"></i><i class="frame bl"></i><i class="frame br"></i>
+
+<div id="stage">
+  <header id="chrome">
+    <div class="brand">Shade Band</div>
+    <div class="grow"></div>
+    <div class="est">EST · not telemetry</div>
+    <div class="rev">r1 · 26 AUG</div>
+    <div class="clk" id="clk">--:-- CT</div>
+  </header>
+
+  <div id="deck">
+
+    <!-- 1 WHY -->
+    <section class="beat why on" data-id="why">
+      <div class="hero">
+        <div class="kicker">Two jobs · one strip</div>
+        <h1 class="ask">40 identical cabs.
+No driver to yell your name.</h1>
+        <p class="sub">Airport curb. Concert let-out. Every cabin the same. Yours has to mark itself in <b>~0.5s</b> <span class="tagmark">EST</span>. Then a medical event with nobody in the front seat.</p>
+        <div class="jobs">
+          <div class="job hi">
+            <div class="lab">Job 1 · curb</div>
+            <div class="val">Which cab is yours</div>
+            <p>App display name or 4-char + color. Never a legal name. Dies when the door opens.</p>
+          </div>
+          <div class="job em">
+            <div class="lab">Job 2 · EMS</div>
+            <div class="val">No-driver medical</div>
+            <p>911 / MEDICAL / DOORS UNLOCKED. Unique value is <b>text</b>. Brightness is a light-bar job.</p>
+          </div>
+        </div>
+      </div>
+      <aside class="plate">
+        <h3>Legal / physics path <span class="badge">REG + ANALOG</span></h3>
+        <div class="tblock">
+          <div class="cap"><span>TITLE BLOCK</span><b>SB-01 · r1 · 26 AUG</b></div>
+          <div class="row"><span class="k">FILM</span><span class="v">Emissive LED-film strip. The film is the display. Makes its own light. Pitch-black works.</span></div>
+          <div class="row"><span class="k">ZONE</span><span class="v">Windshield shade band only. Not driving glass. Not roll-down doors on V1.</span></div>
+          <div class="row"><span class="k reg">LAW</span><span class="v">FMVSS 205 / ANSI Z26.1 · glazing requisite for driving visibility ≥70% VLT.</span></div>
+          <div class="row"><span class="k reg">AS-1</span><span class="v">Shade band above the AS-1 line may sit below 70% VLT.</span></div>
+          <div class="row"><span class="k">BAND</span><span class="v">~5 in header · NHTSA e-Visor letter analog · not a measured Cybercab band.</span></div>
+          <div class="row"><span class="k">PROD</span><span class="v">Laminate the strip. Delete any projector. Best part is no part.</span></div>
+          <div class="row"><span class="k open">TEST</span><span class="v">Phoenix noon readability is the go/no-go. OPEN. No nits on this plate.</span></div>
+        </div>
+        <div class="cabs" aria-hidden="true">
+          <i class="cab"></i><i class="cab"></i><i class="cab"></i><i class="cab"></i>
+          <i class="cab on"></i>
+          <i class="cab"></i><i class="cab"></i><i class="cab"></i><i class="cab"></i>
+          <i class="cab"></i><i class="cab"></i><i class="cab"></i>
+        </div>
+        <div class="cabcap"><span>CURB ROW · EST SCENE</span><span>ONE MARKED · 4-CHAR + COLOR</span></div>
+        <p class="note pack-hide">Cybercab is the analog cabin (two lounge seats, no rear window, framed glass, sides drop). Protocol OPEN. Not a Tesla PO. Not a Tesla product. Class, not a brand lock.</p>
+      </aside>
+    </section>
+
+    <!-- 2 PATH -->
+    <section class="beat" data-id="path">
+      <div class="hero">
+        <div class="kicker">Path · glazing</div>
+        <h1>Film is
+the display.</h1>
+        <p class="sub">Transparent LED-film <b>strip</b> laminated into the windshield <b>shade band</b> only. Emissive. V1 does not fight the sun on the driving glass.</p>
+        <div class="tblock">
+          <div class="cap"><span>ZONE LOCK</span><b>SHADE BAND ONLY</b></div>
+          <div class="row"><span class="k reg">REG</span><span class="v">FMVSS 205 / ANSI Z26.1 · ≥70% VLT where the driver must see.</span></div>
+          <div class="row"><span class="k reg">AS-1</span><span class="v">Above the AS-1 line the shade band may sit below 70% VLT.</span></div>
+          <div class="row"><span class="k">ANALOG</span><span class="v">NHTSA e-Visor letter · ~5 in header strip. Analog, not a Cybercab tape.</span></div>
+          <div class="row"><span class="k">PROD</span><span class="v">Factory laminate. Delete the projector. Best part is no part.</span></div>
+          <div class="row"><span class="k open">OPEN</span><span class="v">Phoenix noon is the go/no-go. No invented nits on this HUD.</span></div>
+        </div>
+        <p class="note">Door / roll-down LED film is a later family — thousands of regulator cycles, beltline eats stick-on film. Not V1.</p>
+      </div>
+      <aside class="plate">
+        <h3>Windshield · shade-band strip <span class="badge">DWG</span></h3>
+        <div class="draw">
+          <div class="dlab"><span>FRONT GLASS · OUTSIDE VIEW</span><b>SPEC · ZONE ONLY</b></div>
+          <svg viewBox="0 0 440 250" role="img" aria-label="Windshield drawing with shade-band LED strip above the AS-1 line">
+            <defs>
+              <linearGradient id="band" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#3DFF8A" stop-opacity=".55"/>
+                <stop offset="1" stop-color="#3DFF8A" stop-opacity=".12"/>
+              </linearGradient>
+            </defs>
+            <text x="12" y="16" fill="#8B9894" font-family="ui-monospace,monospace" font-size="9" letter-spacing="1.4">DWG SB-01  ·  HEADER STRIP</text>
+            <!-- glass -->
+            <polygon points="70,36 370,36 420,228 20,228" fill="rgba(62,224,212,.05)" stroke="#3EE0D4" stroke-width="1.4"/>
+            <!-- shade band -->
+            <polygon points="78,42 362,42 376,78 64,78" fill="url(#band)" stroke="#3DFF8A" stroke-width="1.2"/>
+            <!-- LED cells -->
+            <g fill="#3DFF8A">
+              <rect x="88" y="50" width="18" height="8" opacity=".9"/><rect x="112" y="50" width="18" height="8" opacity=".55"/>
+              <rect x="136" y="50" width="18" height="8" opacity=".9"/><rect x="160" y="50" width="18" height="8" opacity=".55"/>
+              <rect x="184" y="50" width="18" height="8" opacity=".9"/><rect x="208" y="50" width="18" height="8" opacity=".55"/>
+              <rect x="232" y="50" width="18" height="8" opacity=".9"/><rect x="256" y="50" width="18" height="8" opacity=".55"/>
+              <rect x="280" y="50" width="18" height="8" opacity=".9"/><rect x="304" y="50" width="18" height="8" opacity=".55"/>
+              <rect x="328" y="50" width="18" height="8" opacity=".9"/>
+            </g>
+            <text x="220" y="66" text-anchor="middle" fill="#050708" font-family="ui-monospace,monospace" font-size="8" font-weight="700" letter-spacing="1.6">EMISSIVE LED-FILM STRIP</text>
+            <!-- AS-1 -->
+            <line x1="62" y1="86" x2="378" y2="86" stroke="#FFB020" stroke-width="1" stroke-dasharray="5 3"/>
+            <text x="384" y="89" fill="#FFB020" font-family="ui-monospace,monospace" font-size="8" letter-spacing="1">AS-1</text>
+            <!-- dim arrows -->
+            <line x1="28" y1="42" x2="28" y2="78" stroke="#3DFF8A" stroke-width="1"/>
+            <line x1="24" y1="42" x2="32" y2="42" stroke="#3DFF8A" stroke-width="1"/>
+            <line x1="24" y1="78" x2="32" y2="78" stroke="#3DFF8A" stroke-width="1"/>
+            <text x="8" y="64" fill="#3DFF8A" font-family="ui-monospace,monospace" font-size="8">~5 in</text>
+            <text x="8" y="74" fill="#8B9894" font-family="ui-monospace,monospace" font-size="7">ANALOG</text>
+            <text x="220" y="148" text-anchor="middle" fill="#F3F6F4" font-family="ui-monospace,monospace" font-size="13" letter-spacing="2">≥70% VLT</text>
+            <text x="220" y="166" text-anchor="middle" fill="#8B9894" font-family="ui-monospace,monospace" font-size="8" letter-spacing="1.2">DRIVING GLASS · FMVSS 205 / ANSI Z26.1</text>
+            <text x="220" y="210" text-anchor="middle" fill="#8B9894" font-family="ui-monospace,monospace" font-size="8" letter-spacing="1">NO STRIP HERE · DO NOT FIGHT THE SUN</text>
+            <rect x="168" y="28" width="104" height="12" fill="none" stroke="rgba(62,224,212,.35)"/>
+            <text x="220" y="26" text-anchor="middle" fill="#8B9894" font-family="ui-monospace,monospace" font-size="7" letter-spacing="1.2">HEADER · PICO DEMO THEN DELETE</text>
+          </svg>
+        </div>
+        <p class="note">~5 in is the e-Visor letter analog, not a measured Cybercab shade band. Label stays ANALOG.</p>
+      </aside>
+    </section>
+
+    <!-- 3 PICKUP -->
+    <section class="beat" data-id="pickup">
+      <div class="hero">
+        <div class="kicker">Job 1 · curb identity</div>
+        <h1 class="code">K7Q2 <i class="swatch" aria-hidden="true"></i></h1>
+        <p class="sub">App display name or a <b>4-character code + a color</b>. The curb reads it in ~0.5s <span class="tagmark">EST</span>. Lives ~30 seconds <span class="tagmark">EST</span>. Dies when the door opens.</p>
+        <div class="tblock">
+          <div class="cap"><span>PICKUP LOCK</span><b>NEVER A LEGAL NAME</b></div>
+          <div class="row"><span class="k">SHOW</span><span class="v">Handle the rider already uses in the app, or a 4-char code.</span></div>
+          <div class="row"><span class="k">PLUS</span><span class="v">One color on the band. Identical cabins need a second channel.</span></div>
+          <div class="row"><span class="k kill">NEVER</span><span class="v">Legal name on glass. Not on the curb. Not for the camera line.</span></div>
+          <div class="row"><span class="k">TTL</span><span class="v">~30 s EST · door-open kills the mark. No leftover identity on the next ride.</span></div>
+        </div>
+      </div>
+      <aside class="plate">
+        <h3>Curb plate · EST scene <span class="badge">EST</span></h3>
+        <div class="draw">
+          <div class="dlab"><span>SHADE BAND · PICKUP STATE</span><b>30 s · DOOR KILL</b></div>
+          <svg viewBox="0 0 440 168" role="img" aria-label="Shade band showing 4-character code and color">
+            <polygon points="60,28 380,28 410,150 30,150" fill="rgba(62,224,212,.04)" stroke="#3EE0D4" stroke-width="1.2"/>
+            <polygon points="68,34 372,34 382,62 58,62" fill="rgba(255,176,32,.18)" stroke="#FFB020" stroke-width="1.2"/>
+            <text x="220" y="55" text-anchor="middle" fill="#FFB020" font-family="ui-monospace,monospace" font-size="20" font-weight="700" letter-spacing="8">K7Q2</text>
+            <rect x="318" y="40" width="14" height="14" fill="#FFB020" stroke="#F3F6F4" stroke-width=".6"/>
+            <text x="220" y="100" text-anchor="middle" fill="#8B9894" font-family="ui-monospace,monospace" font-size="9" letter-spacing="1.4">NOT A LEGAL NAME · NOT A PLATE NUMBER</text>
+            <text x="220" y="118" text-anchor="middle" fill="#F3F6F4" font-family="ui-monospace,monospace" font-size="10" letter-spacing="1.2">COLOR IS THE SECOND CHANNEL</text>
+            <text x="220" y="140" text-anchor="middle" fill="#8B9894" font-family="ui-monospace,monospace" font-size="8" letter-spacing="1">DOOR OPEN → BAND DARK</text>
+          </svg>
+        </div>
+        <p class="note pack-hide">Code on this plate is a drawing dummy. Real string comes from the rider app. Protocol OPEN so any robotaxi can run the same curb language.</p>
+      </aside>
+    </section>
+
+    <!-- 4 EMS -->
+    <section class="beat" data-id="ems">
+      <div class="hero">
+        <div class="kicker">Job 2 · no-driver medical</div>
+        <h1 class="flood">911
+MEDICAL
+DOORS UNLOCKED</h1>
+        <p class="sub">A robotaxi has no driver to meet the crew. The band has to say what happened and that the cabin is open. <b>Unique value is text.</b></p>
+      </div>
+      <aside class="plate">
+        <h3>EMS plate <span class="badge dead">TEXT</span></h3>
+        <div class="floodmock">911 &nbsp;·&nbsp; MEDICAL &nbsp;·&nbsp; DOORS UNLOCKED</div>
+        <div class="tblock" style="margin-top:10px">
+          <div class="cap"><span>SPLIT OF LABOR</span><b>TEXT ≠ LIGHT BAR</b></div>
+          <div class="row"><span class="k">BAND</span><span class="v">Words the crew can read from the curb. 911 / MEDICAL / DOORS UNLOCKED.</span></div>
+          <div class="row"><span class="k">BAR</span><span class="v">Brightness, flash, find-the-car. That is a light-bar job. Do not ask film to be a beacon.</span></div>
+          <div class="row"><span class="k">ZONE</span><span class="v">Flood the shade band. Do not write on the ≥70% VLT driving glass.</span></div>
+          <div class="row"><span class="k">WHY</span><span class="v">No driver. The glass is the briefing. Text is what EMS did not have.</span></div>
+        </div>
+        <p class="note">No invented candela, no invented interconnect, no claimed OEM emergency contract. Job is the words.</p>
+      </aside>
+    </section>
+
+    <!-- 5 FILM -->
+    <section class="beat" data-id="film">
+      <div class="hero">
+        <div class="kicker">Film class · why LED wins</div>
+        <h1 class="ask">Emissive strip.
+Projector film is a demo, then delete.</h1>
+        <p class="sub">LED-film makes its own light. ClearBright™ is a nanoparticle <b>projector scatter</b> film (MIT-origin, Lux Labs) — not an LED film. It only shows an image when a projector hits it. Their copy: sunlight makes the film invisible.</p>
+      </div>
+      <aside class="plate">
+        <h3>Three stacks <span class="badge ok">LED</span> <span class="badge dead">REJECT</span></h3>
+        <div class="cols3">
+          <div class="col win">
+            <div class="lab">V1 · Emissive LED strip</div>
+            <ul>
+              <li>Transparent LED-film strip in the shade band.</li>
+              <li>Makes its own light. Pitch-black works.</li>
+              <li>Production laminates. No cabin projector.</li>
+              <li>Phoenix noon go/no-go <span class="tagmark">OPEN</span>.</li>
+              <li>Storefront LED-film vendors publish ~2000–5000 nits — published-class storefront analog, <b>not</b> a Cybercab measurement.</li>
+            </ul>
+          </div>
+          <div class="col lose">
+            <div class="lab">ClearBright™ · reject</div>
+            <ul>
+              <li>Scatter film. Image only with a projector on it.</li>
+              <li>Not an LED film. Do not call it one.</li>
+              <li>Sunlight makes the film invisible — their copy.</li>
+              <li>Dealers want 1000–3500 lumens for indoor rooms.</li>
+              <li>Real picos are ~50–500 ANSI lumens <span class="tagmark">EST</span>.</li>
+            </ul>
+          </div>
+          <div class="col lose">
+            <div class="lab">Three-pico · reject</div>
+            <ul>
+              <li>Three picos + three windows = parts, heat, alignment.</li>
+              <li>Side windows go down. Beltline eats stick-on film.</li>
+              <li>Least-bad projector demo: <b>one</b> pico in the header, <b>one</b> shade-band strip. Then delete it.</li>
+            </ul>
+          </div>
+        </div>
+        <p class="note pack-hide">No nits claimed for this cabin. No volts. No dollar. Pico lumen class is EST. Phoenix noon is OPEN. Analog stack only — class, not a brand lock.</p>
+      </aside>
+    </section>
+
+    <!-- 6 BUILD -->
+    <section class="beat" data-id="build">
+      <div class="hero">
+        <div class="kicker">Build · this week then factory</div>
+        <h1>Snap-on
+this week.</h1>
+        <p class="sub">A clip-on sunshade with an LED strip is the X-grab prototype someone can build now. Production laminates the film into the shade band and <b>deletes the clip</b>.</p>
+        <div class="steps" style="margin-top:12px">
+          <div class="step live">
+            <div class="mark"><i class="dot"></i><i class="stem"></i></div>
+            <div class="body"><div class="nm">This week · snap-on</div><div class="ds">Sunshade + LED strip. Prove curb code and EMS text from outside the glass. No factory tool.</div></div>
+          </div>
+          <div class="step">
+            <div class="mark"><i class="dot"></i><i class="stem"></i></div>
+            <div class="body"><div class="nm">Least-bad demo · then delete</div><div class="ds">One pico in the header, one shade-band strip, if a projector demo is required. Not production.</div></div>
+          </div>
+          <div class="step">
+            <div class="mark"><i class="dot"></i><i class="stem"></i></div>
+            <div class="body"><div class="nm">Factory · laminate</div><div class="ds">LED-film strip in the shade band at the plant. Delete the clip. Delete the projector. Best part is no part.</div></div>
+          </div>
+          <div class="step">
+            <div class="mark"><i class="dot"></i><i class="stem"></i></div>
+            <div class="body"><div class="nm">Protocol · OPEN</div><div class="ds">Robotaxi identity language is OPEN. Any robotaxi. Cybercab is the analog cabin, not a purchase order.</div></div>
+          </div>
+        </div>
+      </div>
+      <aside class="plate">
+        <h3>Prototype → delete the clip <span class="badge">SPEC</span></h3>
+        <div class="draw">
+          <div class="dlab"><span>SNAP-ON SUNSHADE</span><b>THEN LAMINATE</b></div>
+          <svg viewBox="0 0 440 200" role="img" aria-label="Snap-on sunshade prototype then factory laminate">
+            <text x="12" y="16" fill="#8B9894" font-family="ui-monospace,monospace" font-size="9" letter-spacing="1.2">A · CLIP  ·  THIS WEEK</text>
+            <rect x="48" y="28" width="160" height="22" fill="rgba(61,255,138,.2)" stroke="#3DFF8A"/>
+            <text x="128" y="43" text-anchor="middle" fill="#3DFF8A" font-family="ui-monospace,monospace" font-size="8" letter-spacing="1.2">LED STRIP</text>
+            <path d="M48 50 L40 78 L216 78 L208 50" fill="rgba(243,246,244,.08)" stroke="#8B9894"/>
+            <text x="128" y="70" text-anchor="middle" fill="#8B9894" font-family="ui-monospace,monospace" font-size="8">SNAP-ON SUNSHADE</text>
+            <text x="250" y="58" fill="#3EE0D4" font-family="ui-monospace,monospace" font-size="14">→</text>
+            <text x="280" y="16" fill="#8B9894" font-family="ui-monospace,monospace" font-size="9" letter-spacing="1.2">B · FACTORY  ·  DELETE CLIP</text>
+            <polygon points="286,28 414,28 428,120 272,120" fill="rgba(62,224,212,.05)" stroke="#3EE0D4"/>
+            <polygon points="292,32 408,32 412,52 288,52" fill="rgba(61,255,138,.28)" stroke="#3DFF8A"/>
+            <text x="350" y="46" text-anchor="middle" fill="#050708" font-family="ui-monospace,monospace" font-size="8" font-weight="700">LAMINATE</text>
+            <text x="350" y="88" text-anchor="middle" fill="#8B9894" font-family="ui-monospace,monospace" font-size="8">CLIP GONE</text>
+            <text x="220" y="150" text-anchor="middle" fill="#F3F6F4" font-family="ui-monospace,monospace" font-size="10" letter-spacing="1.4">BEST PART IS NO PART</text>
+            <text x="220" y="170" text-anchor="middle" fill="#8B9894" font-family="ui-monospace,monospace" font-size="8" letter-spacing="1">PROTOCOL OPEN · ANY ROBOTAXI · NOT A PO</text>
+            <text x="220" y="188" text-anchor="middle" fill="#8B9894" font-family="ui-monospace,monospace" font-size="8" letter-spacing="1">CABIN ANALOG · 2 LOUNGE · NO REAR GLASS · SIDES DROP</text>
+          </svg>
+        </div>
+        <p class="note pack-hide">Later family: door / roll-down LED film. Not this drawing. Analog stack only — class, not a brand lock.</p>
+      </aside>
+    </section>
+
+    <!-- 7 DO NOT -->
+    <section class="beat" data-id="donot">
+      <div class="hero">
+        <div class="kicker">Do not · production kill list</div>
+        <h1>Do not
+build these.</h1>
+        <p class="sub">If it is on this list it is not V1. The funded path is one emissive strip in the shade band, then delete everything else.</p>
+      </div>
+      <aside class="plate">
+        <h3>Rejected <span class="badge dead">KILL</span></h3>
+        <div class="kills">
+          <div class="kill"><span class="k">BEAM</span><span class="v">Projector behind the seats. Heads in the beam.</span></div>
+          <div class="kill"><span class="k">3-WINDOW</span><span class="v">Three-window V1. Side glass drops. Beltline eats film.</span></div>
+          <div class="kill"><span class="k">SUN</span><span class="v">Fight the sun on the full windshield. Driving glass stays ≥70% VLT.</span></div>
+          <div class="kill"><span class="k">HOE HUD</span><span class="v">HUD-style HOE aimed at an interior eyebox. Audience is outside the car.</span></div>
+          <div class="kill"><span class="k">NAME</span><span class="v">Legal names on glass. Curb gets a handle or 4-char + color.</span></div>
+          <div class="kill"><span class="k">DOORS</span><span class="v">Peel-stick on roll-down doors as V1. Later family only.</span></div>
+        </div>
+        <div class="tblock" style="margin-top:10px">
+          <div class="cap"><span>ALSO NOT ON THIS PLATE</span><b>NO INVENTION</b></div>
+          <div class="row"><span class="k kill">NO</span><span class="v">Invented nits, dollars, volts, or interconnects.</span></div>
+          <div class="row"><span class="k kill">NO</span><span class="v">Signed OEM deal. No Tesla purchase order.</span></div>
+          <div class="row"><span class="k kill">NO</span><span class="v">Branding this as an Archer or Tesla product.</span></div>
+          <div class="row"><span class="k kill">NO</span><span class="v">Calling ClearBright™ an LED film. It is projector scatter film.</span></div>
+        </div>
+        <p class="note">Stamp r1 · 26 AUG. Protocol OPEN. Cybercab is cabin analog only.</p>
+      </aside>
+    </section>
+
+  </div>
+
+  <div class="dwgfoot">
+    <span>DWG <b>SB-01</b></span>
+    <span>REV <b>r1 · 26 AUG</b></span>
+    <span>CLASS <b>ANALOG · OPEN</b></span>
+    <span>ZONE <b>SHADE BAND</b></span>
+    <span>TEST <b>PHOENIX NOON · OPEN</b></span>
+  </div>
+</div>
+
+<nav id="transport" aria-label="Beat transport">
+  <div class="btns">
+    <button type="button" id="back">BACK</button>
+    <button type="button" id="play" aria-pressed="true">PAUSE</button>
+    <button type="button" id="next">NEXT</button>
+  </div>
+  <div class="dots" id="dots" aria-hidden="true"></div>
+  <div class="bname" id="bname">1 / 7  WHY</div>
+</nav>
+
+<div id="boot">
+  <div class="b">SHADE BAND</div>
+  <div class="s">r1 · 26 AUG · EST · not telemetry</div>
+</div>
+
+<script>
+(function(){
+  const BEATS = [
+    {id:'why',    dur:16000, name:'WHY'},
+    {id:'path',   dur:12000, name:'PATH'},
+    {id:'pickup', dur:10000, name:'PICKUP'},
+    {id:'ems',    dur:10000, name:'EMS'},
+    {id:'film',   dur:14000, name:'FILM'},
+    {id:'build',  dur:12000, name:'BUILD'},
+    {id:'donot',  dur:12000, name:'DO NOT'}
+  ];
+
+  const deck = document.getElementById('deck');
+  const dots = document.getElementById('dots');
+  const bname = document.getElementById('bname');
+  const playBtn = document.getElementById('play');
+  const beatfill = document.getElementById('beatfill');
+  const root = document.documentElement;
+  const beats = Array.from(document.querySelectorAll('.beat'));
+
+  let idx = 0;
+  let playing = true;
+  let t0 = 0;
+  let packTimer = 0;
+
+  BEATS.forEach((_, i) => {
+    const el = document.createElement('i');
+    if (i === 0) el.classList.add('on');
+    dots.appendChild(el);
+  });
+
+  function clock(){
+    const t = new Date().toLocaleTimeString('en-US', {
+      timeZone: 'America/Chicago', hour: '2-digit', minute: '2-digit', hour12: false
+    });
+    document.getElementById('clk').textContent = t + ' CT';
+  }
+  clock();
+  setInterval(clock, 15000);
+
+  function pack(){
+    const beat = beats[idx];
+    if (!beat) return;
+    root.style.setProperty('--pack', '1');
+    beat.classList.remove('compact');
+    const wide = window.matchMedia('(min-width:860px) and (orientation:landscape)').matches;
+    if (!wide) return;
+    const avail = deck.clientHeight;
+    if (avail < 40) return;
+    if (beat.scrollHeight <= avail) return;
+    beat.classList.add('compact');
+    if (beat.scrollHeight <= avail) return;
+    let lo = 0.74, hi = 1, best = 0.74;
+    for (let i = 0; i < 8; i++){
+      const mid = (lo + hi) / 2;
+      root.style.setProperty('--pack', String(mid));
+      if (beat.scrollHeight <= avail){ best = mid; lo = mid; }
+      else hi = mid;
+    }
+    root.style.setProperty('--pack', String(best));
+  }
+
+  function schedulePack(){
+    cancelAnimationFrame(packTimer);
+    packTimer = requestAnimationFrame(pack);
+  }
+
+  function apply(n, resetTime){
+    idx = (n + BEATS.length) % BEATS.length;
+    const b = BEATS[idx];
+    beats.forEach((el, i) => el.classList.toggle('on', i === idx));
+    dots.querySelectorAll('i').forEach((el, i) => el.classList.toggle('on', i === idx));
+    bname.textContent = (idx + 1) + ' / ' + BEATS.length + '  ' + b.name;
+    if (resetTime !== false) t0 = performance.now();
+    beatfill.style.width = '0%';
+    schedulePack();
+  }
+
+  function setPlaying(on){
+    playing = on;
+    playBtn.textContent = on ? 'PAUSE' : 'PLAY';
+    playBtn.setAttribute('aria-pressed', on ? 'true' : 'false');
+    if (on) t0 = performance.now() - (parseFloat(beatfill.style.width) || 0) / 100 * BEATS[idx].dur;
+  }
+
+  document.getElementById('back').addEventListener('click', () => { setPlaying(false); apply(idx - 1); });
+  document.getElementById('next').addEventListener('click', () => { setPlaying(false); apply(idx + 1); });
+  playBtn.addEventListener('click', () => {
+    if (!playing && (performance.now() - t0) >= BEATS[idx].dur - 20){
+      if (idx === BEATS.length - 1){ setPlaying(true); apply(0); return; }
+      setPlaying(true); apply(idx + 1); return;
+    }
+    setPlaying(!playing);
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown'){ e.preventDefault(); setPlaying(false); apply(idx + 1); }
+    if (e.key === 'ArrowLeft' || e.key === 'ArrowUp'){ e.preventDefault(); setPlaying(false); apply(idx - 1); }
+    if (e.key === ' ' || e.key === 'Spacebar'){ e.preventDefault(); playBtn.click(); }
+  });
+
+  let sx = 0, sy = 0;
+  document.getElementById('stage').addEventListener('touchstart', (e) => {
+    sx = e.changedTouches[0].clientX; sy = e.changedTouches[0].clientY;
+  }, {passive:true});
+  document.getElementById('stage').addEventListener('touchend', (e) => {
+    const dx = e.changedTouches[0].clientX - sx;
+    const dy = e.changedTouches[0].clientY - sy;
+    if (Math.abs(dx) < 56 || Math.abs(dx) < Math.abs(dy)) return;
+    setPlaying(false);
+    apply(idx + (dx < 0 ? 1 : -1));
+  }, {passive:true});
+
+  function tick(now){
+    const b = BEATS[idx];
+    const elapsed = now - t0;
+    const p = Math.min(1, elapsed / b.dur);
+    beatfill.style.width = (p * 100) + '%';
+    if (playing && elapsed >= b.dur){
+      if (idx === 0 || idx === BEATS.length - 1){
+        setPlaying(false);
+        beatfill.style.width = '100%';
+      } else {
+        apply(idx + 1);
+      }
+    }
+    requestAnimationFrame(tick);
+  }
+
+  window.addEventListener('resize', schedulePack);
+  if (window.ResizeObserver){
+    new ResizeObserver(schedulePack).observe(deck);
+  }
+
+  const qs = new URLSearchParams(location.search);
+  const start = Math.max(0, Math.min(BEATS.length - 1, parseInt(qs.get('b') || '0', 10) || 0));
+  if (qs.get('play') === '0') playing = false;
+
+  const boot = document.getElementById('boot');
+  apply(start);
+  if (!playing){ playBtn.textContent = 'PLAY'; playBtn.setAttribute('aria-pressed', 'false'); }
+  requestAnimationFrame(tick);
+  setTimeout(() => {
+    boot.classList.add('off');
+    setTimeout(() => boot.remove(), 560);
+    schedulePack();
+  }, 420);
+})();
+</script>
+</body>
+</html>

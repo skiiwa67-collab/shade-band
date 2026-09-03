@@ -57,6 +57,7 @@
   #sceneBox{position:relative;margin-top:10px;border:1px solid var(--line);
     background:#050708;aspect-ratio:var(--asp);overflow:hidden;}
   #scene{position:absolute;inset:0;width:100%;height:100%;display:block;}
+  #scene text{font-family:var(--mono);}
 
   .tblock{margin-top:12px;border:1px solid rgba(62,224,212,.22);background:rgba(5,8,10,.55);
     padding:9px 11px;}
@@ -83,7 +84,7 @@
   body.film #stamp{top:14px;right:16px;}
 
   @media (max-width:760px){
-    :root{--asp:6/5;}
+    :root{--asp:21/20;}
     #wrap{padding:10px 10px 22px;}
     .row{grid-template-columns:1fr;gap:1px;}
     #stamp{right:26px;}
@@ -110,7 +111,7 @@
 
   <div id="sceneBox">
     <svg id="scene" viewBox="0 0 1280 720" preserveAspectRatio="xMidYMid meet"
-         role="img" aria-label="Technical drawing: a Tesla Cybercab pulls up to the curb. The windshield shade band is a transparent LED film scrolling HELLO JEREMY, WELCOME TO CYBERCAB, JEREMY JUDKINS, YOUR RIDE, DOORS UNLOCKED. Narrow LED strips on each side glass scroll JEREMY JUDKINS.">
+         role="img" aria-label="Technical drawing: a Cybercab robotaxi pulls up to the curb. The windshield shade band is a transparent emissive LED film scrolling HELLO JEREMY, WELCOME TO CYBERCAB, JEREMY JUDKINS, YOUR RIDE, DOORS UNLOCKED. A narrow LED strip on each side glass scrolls JEREMY JUDKINS.">
       <defs>
         <linearGradient id="gSky" x1="0" y1="0" x2="0" y2="1">
           <stop offset="0" stop-color="#070b0c"/><stop offset="1" stop-color="#050708"/>
@@ -119,27 +120,27 @@
           <stop offset="0" stop-color="#080b0c"/><stop offset="1" stop-color="#040506"/>
         </linearGradient>
         <linearGradient id="gBody" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stop-color="#43423c"/>
-          <stop offset=".34" stop-color="#2b2a25"/>
-          <stop offset=".72" stop-color="#1a1a17"/>
-          <stop offset="1" stop-color="#101110"/>
+          <stop offset="0" stop-color="#6a6252"/>
+          <stop offset=".26" stop-color="#443f34"/>
+          <stop offset=".62" stop-color="#26241d"/>
+          <stop offset="1" stop-color="#141513"/>
         </linearGradient>
         <linearGradient id="gFlank" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stop-color="#2c2b26"/><stop offset="1" stop-color="#0d0e0d"/>
+          <stop offset="0" stop-color="#3a3529"/><stop offset="1" stop-color="#111210"/>
         </linearGradient>
         <linearGradient id="gGlass" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stop-color="#0c1517"/><stop offset="1" stop-color="#05090a"/>
+          <stop offset="0" stop-color="#0e181a"/><stop offset="1" stop-color="#060b0c"/>
         </linearGradient>
         <linearGradient id="gChamp" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stop-color="rgba(214,196,158,.62)"/>
-          <stop offset="1" stop-color="rgba(214,196,158,0)"/>
+          <stop offset="0" stop-color="rgba(226,208,168,.55)"/>
+          <stop offset="1" stop-color="rgba(226,208,168,0)"/>
         </linearGradient>
         <linearGradient id="gBar" x1="0" y1="0" x2="1" y2="0">
-          <stop offset="0" stop-color="rgba(243,246,244,.15)"/>
-          <stop offset=".18" stop-color="rgba(243,246,244,.92)"/>
-          <stop offset=".5" stop-color="#FFFFFF"/>
-          <stop offset=".82" stop-color="rgba(243,246,244,.92)"/>
-          <stop offset="1" stop-color="rgba(243,246,244,.15)"/>
+          <stop offset="0" stop-color="rgba(243,246,244,.10)"/>
+          <stop offset=".16" stop-color="rgba(255,246,226,.85)"/>
+          <stop offset=".5" stop-color="#FFFBF2"/>
+          <stop offset=".84" stop-color="rgba(255,246,226,.85)"/>
+          <stop offset="1" stop-color="rgba(243,246,244,.10)"/>
         </linearGradient>
         <linearGradient id="gSweep" x1="0" y1="0" x2="1" y2="0">
           <stop offset="0" stop-color="rgba(255,176,32,0)"/>
@@ -147,13 +148,13 @@
           <stop offset="1" stop-color="rgba(255,176,32,0)"/>
         </linearGradient>
         <radialGradient id="gShadow">
-          <stop offset="0" stop-color="rgba(0,0,0,.8)"/><stop offset="1" stop-color="rgba(0,0,0,0)"/>
+          <stop offset="0" stop-color="rgba(0,0,0,.85)"/><stop offset="1" stop-color="rgba(0,0,0,0)"/>
         </radialGradient>
         <radialGradient id="gPool">
-          <stop offset="0" stop-color="rgba(233,240,236,.30)"/><stop offset="1" stop-color="rgba(233,240,236,0)"/>
+          <stop offset="0" stop-color="rgba(240,244,238,.26)"/><stop offset="1" stop-color="rgba(240,244,238,0)"/>
         </radialGradient>
         <radialGradient id="gBandWash">
-          <stop offset="0" stop-color="rgba(255,176,32,.30)"/><stop offset="1" stop-color="rgba(255,176,32,0)"/>
+          <stop offset="0" stop-color="rgba(255,176,32,.32)"/><stop offset="1" stop-color="rgba(255,176,32,0)"/>
         </radialGradient>
         <clipPath id="clipBand"><path id="clipBandP" d="M0,0"/></clipPath>
         <clipPath id="clipSL"><path id="clipSLP" d="M0,0"/></clipPath>
@@ -161,68 +162,89 @@
 
         <!-- CYBERCAB · front three-quarter · origin at ground centre, up is -y -->
         <g id="cabArt">
-          <!-- tyres (behind body) -->
-          <g stroke="rgba(243,246,244,.20)" stroke-width="1.4" fill="#0a0b0b">
-            <rect x="-296" y="-112" width="66" height="112" rx="17"/>
-            <rect x="322" y="-100" width="44" height="100" rx="15"/>
-            <rect x="236" y="-116" width="86" height="116" rx="18"/>
+          <!-- tyres, drawn behind the body -->
+          <g fill="#0a0b0b" stroke="rgba(243,246,244,.22)" stroke-width="1.4">
+            <rect x="-306" y="-132" width="62" height="132" rx="18"/>
+            <rect x="312" y="-98" width="40" height="98" rx="13"/>
+            <rect x="198" y="-128" width="80" height="128" rx="20"/>
           </g>
-          <!-- near front disc wheel cover: smooth disc, no spokes -->
+          <!-- near front wheel: smooth disc cover, no spokes -->
           <g>
-            <ellipse cx="312" cy="-58" rx="14" ry="47" fill="#1d1f1f" stroke="rgba(243,246,244,.34)" stroke-width="1.4"/>
-            <ellipse cx="312" cy="-58" rx="8.5" ry="31" fill="none" stroke="rgba(214,196,158,.30)" stroke-width="1.2"/>
-            <ellipse cx="312" cy="-58" rx="3" ry="10" fill="none" stroke="rgba(243,246,244,.22)" stroke-width="1"/>
+            <ellipse cx="240" cy="-62" rx="30" ry="49" fill="#232522" stroke="rgba(243,246,244,.36)" stroke-width="1.5"/>
+            <ellipse cx="240" cy="-62" rx="20" ry="33" fill="none" stroke="rgba(226,208,168,.34)" stroke-width="1.3"/>
+            <ellipse cx="240" cy="-62" rx="8" ry="13" fill="none" stroke="rgba(243,246,244,.26)" stroke-width="1.1"/>
           </g>
-          <!-- receding flank -->
-          <path d="M 150,-320 C 240,-310 302,-284 330,-244 C 352,-212 360,-162 356,-114
-                   C 352,-72 340,-46 314,-42 L 200,-42 Z"
-                fill="url(#gFlank)" stroke="rgba(243,246,244,.22)" stroke-width="1.6"/>
-          <path d="M 214,-232 C 262,-226 306,-232 340,-244" fill="none" stroke="rgba(243,246,244,.16)" stroke-width="1.2"/>
+          <!-- far front wheel inner face hint -->
+          <ellipse cx="-276" cy="-64" rx="10" ry="40" fill="#191b19" stroke="rgba(243,246,244,.16)" stroke-width="1.1"/>
+
+          <!-- receding near flank -->
+          <path d="M 214,-278 C 268,-270 306,-248 326,-214 C 344,-186 354,-150 352,-116
+                   C 350,-86 340,-58 316,-52 L 300,-52 C 296,-106 268,-130 238,-130
+                   C 216,-130 198,-116 190,-92 L 210,-200 Z"
+                fill="url(#gFlank)" opacity=".9"/>
+
           <!-- main shell -->
-          <path d="M -258,-42 C -288,-44 -299,-74 -299,-112
-                   C -299,-164 -288,-216 -258,-252
-                   C -222,-296 -158,-328 -58,-332 L 96,-332
-                   C 190,-328 248,-298 274,-254
-                   C 298,-214 304,-162 304,-112
-                   C 304,-74 294,-44 266,-42 Z"
-                fill="url(#gBody)" stroke="rgba(243,246,244,.46)" stroke-width="2.1"/>
-          <!-- champagne crown highlight -->
-          <path d="M -246,-256 C -212,-298 -152,-326 -56,-330 L 94,-330
-                   C 188,-326 244,-298 270,-258
-                   C 236,-292 176,-312 92,-315 L -54,-315
-                   C -148,-312 -210,-292 -246,-256 Z"
-                fill="url(#gChamp)" opacity=".5"/>
-          <!-- windshield glass -->
-          <path d="M -244,-296 C -150,-320 132,-320 250,-290
-                   C 258,-252 258,-214 250,-186
-                   C 118,-206 -114,-206 -238,-186
-                   C -250,-216 -252,-256 -244,-296 Z"
-                fill="url(#gGlass)" stroke="rgba(62,224,212,.26)" stroke-width="1.6"/>
-          <path d="M -228,-286 C -140,-306 -40,-312 40,-311" fill="none"
-                stroke="rgba(243,246,244,.13)" stroke-width="6" stroke-linecap="round"/>
-          <!-- shade band frame (drawn under the dots) -->
-          <path id="bandPanel" d="M0,0" fill="#0b0c0c" stroke="rgba(255,176,32,.30)" stroke-width="1.2"/>
-          <!-- cowl / hood shut line -->
-          <path d="M -240,-184 C -110,-204 118,-204 252,-184" fill="none"
-                stroke="rgba(243,246,244,.30)" stroke-width="1.6"/>
-          <!-- nose shoulder crease -->
-          <path d="M -290,-140 C -150,-158 130,-158 300,-138" fill="none"
-                stroke="rgba(243,246,244,.14)" stroke-width="1.3"/>
-          <!-- lower fascia intake slot -->
-          <path d="M -214,-74 C -90,-86 96,-86 232,-74 C 232,-60 232,-58 232,-56
-                   C 96,-68 -90,-68 -214,-56 Z"
-                fill="#0a0b0b" stroke="rgba(243,246,244,.20)" stroke-width="1.2"/>
-          <!-- butterfly door seam (near side) -->
-          <path d="M 214,-318 C 236,-268 244,-206 240,-150 C 238,-108 232,-70 224,-44"
+          <path d="M -348,-110
+                   C -348,-150 -338,-186 -312,-202
+                   C -290,-224 -262,-250 -222,-266
+                   C -120,-288 96,-292 218,-278
+                   C 268,-270 304,-248 326,-214
+                   C 344,-186 354,-150 352,-116
+                   C 350,-86 340,-58 316,-52
+                   L 300,-52
+                   C 296,-106 268,-130 238,-130
+                   C 208,-130 184,-106 180,-50
+                   L -186,-54
+                   C -190,-110 -218,-134 -250,-134
+                   C -284,-134 -306,-108 -310,-56
+                   L -332,-58
+                   C -344,-68 -348,-88 -348,-110 Z"
+                fill="url(#gBody)" stroke="rgba(243,246,244,.52)" stroke-width="2.2"/>
+
+          <!-- champagne crown sheen -->
+          <path d="M -302,-206 C -272,-236 -240,-254 -206,-266
+                   C -104,-286 96,-290 216,-276
+                   C 262,-268 296,-248 318,-220
+                   C 288,-244 250,-258 200,-262
+                   C 90,-272 -102,-268 -200,-250
+                   C -240,-242 -276,-224 -302,-206 Z"
+                fill="url(#gChamp)" opacity=".55"/>
+          <!-- shoulder crease -->
+          <path d="M -344,-146 C -250,-176 60,-186 340,-152" fill="none"
+                stroke="rgba(243,246,244,.16)" stroke-width="1.3"/>
+
+          <!-- windshield -->
+          <path d="M -222,-262 C -120,-284 96,-288 214,-274
+                   C 236,-244 244,-206 240,-178
+                   C 100,-198 -130,-196 -280,-172
+                   C -276,-206 -252,-238 -222,-262 Z"
+                fill="url(#gGlass)" stroke="rgba(62,224,212,.28)" stroke-width="1.7"/>
+          <path d="M -206,-252 C -140,-266 -40,-274 44,-276" fill="none"
+                stroke="rgba(243,246,244,.11)" stroke-width="7" stroke-linecap="round"/>
+          <!-- shade band frame, under the dots -->
+          <path id="bandPanel" d="M0,0" fill="#0b0c0c" stroke="rgba(255,176,32,.32)" stroke-width="1.3"/>
+          <!-- cowl shut line -->
+          <path d="M -278,-168 C -128,-192 104,-194 240,-174" fill="none"
+                stroke="rgba(243,246,244,.28)" stroke-width="1.6"/>
+          <!-- butterfly door seam -->
+          <path d="M 212,-274 C 232,-232 240,-186 238,-142 C 236,-104 230,-74 222,-52"
                 fill="none" stroke="rgba(243,246,244,.26)" stroke-width="1.4" stroke-dasharray="7 5"/>
+          <!-- lower fascia slot -->
+          <path d="M -232,-86 C -110,-98 78,-100 208,-88 L 208,-72
+                   C 78,-84 -110,-82 -232,-70 Z"
+                fill="#0a0b0b" stroke="rgba(243,246,244,.18)" stroke-width="1.1"/>
+          <!-- splitter -->
+          <path d="M -292,-58 C -160,-70 60,-72 306,-56" fill="none"
+                stroke="rgba(243,246,244,.14)" stroke-width="1.2"/>
+
           <!-- side glass · near (right) -->
-          <path id="glassR" d="M 258,-288 C 292,-274 318,-252 332,-228 L 324,-192
-                   C 308,-222 286,-244 250,-260 Z"
-                fill="url(#gGlass)" stroke="rgba(62,224,212,.24)" stroke-width="1.3"/>
+          <path id="glassR" d="M 216,-272 C 254,-262 292,-242 320,-212
+                   L 328,-176 C 296,-198 258,-212 220,-220 Z"
+                fill="url(#gGlass)" stroke="rgba(62,224,212,.26)" stroke-width="1.3"/>
           <!-- side glass · far (left) -->
-          <path id="glassL" d="M -252,-282 C -272,-262 -286,-238 -292,-214 L -286,-184
-                   C -278,-218 -266,-246 -246,-264 Z"
-                fill="url(#gGlass)" stroke="rgba(62,224,212,.20)" stroke-width="1.2"/>
+          <path id="glassL" d="M -228,-258 C -256,-240 -280,-216 -292,-190
+                   L -286,-160 C -276,-190 -256,-216 -226,-234 Z"
+                fill="url(#gGlass)" stroke="rgba(62,224,212,.22)" stroke-width="1.2"/>
         </g>
       </defs>
 
@@ -230,48 +252,47 @@
       <rect id="sky" x="0" y="0" width="1280" height="404" fill="url(#gSky)"/>
       <rect id="road" x="0" y="404" width="1280" height="316" fill="url(#gRoad)"/>
       <line id="horizon" x1="0" y1="404" x2="1280" y2="404" stroke="rgba(139,152,148,.26)" stroke-width="1"/>
-      <g id="curb" stroke="rgba(243,246,244,.20)" fill="none">
-        <line x1="-60" y1="694" x2="1240" y2="396" stroke-width="2"/>
-        <line x1="-60" y1="716" x2="1240" y2="402" stroke-width="1"/>
+      <g id="curb" fill="none">
+        <line x1="-60" y1="694" x2="1240" y2="396" stroke="rgba(243,246,244,.20)" stroke-width="2"/>
+        <line x1="-60" y1="716" x2="1240" y2="402" stroke="rgba(243,246,244,.13)" stroke-width="1"/>
         <g id="curbHatch" stroke="rgba(139,152,148,.20)" stroke-width="1"></g>
       </g>
-      <text id="curbTag" x="18" y="700" font-size="11" letter-spacing="1.6"
-            fill="#8B9894" font-family="var(--mono)">CURB · VIEWER STANDS HERE</text>
+      <text id="curbTag" x="18" y="700" font-size="11" letter-spacing="1.6" fill="#8B9894">CURB · VIEWER STANDS HERE</text>
 
       <g id="cabWrap" transform="translate(640,534)">
-        <ellipse id="shadow" cx="0" cy="-4" rx="330" ry="30" fill="url(#gShadow)"/>
+        <ellipse id="shadow" cx="0" cy="-4" rx="340" ry="26" fill="url(#gShadow)"/>
         <ellipse id="pool" cx="0" cy="34" rx="300" ry="58" fill="url(#gPool)" opacity="0"/>
         <g id="cabScale">
           <use href="#cabArt" xlink:href="#cabArt"/>
           <!-- front light bar -->
           <g id="lightbar" opacity="0">
-            <path d="M -250,-124 C -110,-142 128,-142 296,-120" fill="none"
-                  stroke="url(#gBar)" stroke-width="16" stroke-linecap="round" opacity=".14"/>
-            <path d="M -250,-124 C -110,-142 128,-142 296,-120" fill="none"
-                  stroke="url(#gBar)" stroke-width="6" stroke-linecap="round" opacity=".55"/>
-            <path d="M -250,-124 C -110,-142 128,-142 296,-120" fill="none"
-                  stroke="url(#gBar)" stroke-width="2.4" stroke-linecap="round"/>
+            <path d="M -320,-118 C -170,-140 92,-142 330,-114" fill="none"
+                  stroke="url(#gBar)" stroke-width="13" stroke-linecap="round" opacity=".10"/>
+            <path d="M -320,-118 C -170,-140 92,-142 330,-114" fill="none"
+                  stroke="url(#gBar)" stroke-width="5" stroke-linecap="round" opacity=".42"/>
+            <path d="M -320,-118 C -170,-140 92,-142 330,-114" fill="none"
+                  stroke="url(#gBar)" stroke-width="1.9" stroke-linecap="round"/>
           </g>
-          <!-- shade band matrix -->
+          <!-- shade band dot matrix -->
           <g id="bandGrp" opacity="0">
             <g clip-path="url(#clipBand)">
-              <rect id="bandWash" x="-260" y="-330" width="520" height="90" fill="url(#gBandWash)" opacity=".55"/>
+              <rect id="bandWash" x="-230" y="-300" width="450" height="90" fill="url(#gBandWash)" opacity=".5"/>
               <path id="bandOff" d="M0,0" fill="#FFB020" opacity=".085"/>
               <path id="bandBloom" d="M0,0" fill="#FFB020" opacity=".17"/>
               <path id="bandLit" d="M0,0" fill="#FFC24D"/>
-              <rect id="sweep" x="-400" y="-336" width="110" height="100" fill="url(#gSweep)" opacity="0"/>
+              <rect id="sweep" x="-400" y="-300" width="110" height="100" fill="url(#gSweep)" opacity="0"/>
             </g>
           </g>
-          <!-- side strips -->
+          <!-- side glass strips -->
           <g id="sideGrp" opacity="0">
             <g clip-path="url(#clipSR)">
-              <path id="srOff" d="M0,0" fill="#FFB020" opacity=".08"/>
-              <path id="srBloom" d="M0,0" fill="#FFB020" opacity=".18"/>
+              <path id="srOff" d="M0,0" fill="#FFB020" opacity=".085"/>
+              <path id="srBloom" d="M0,0" fill="#FFB020" opacity=".19"/>
               <path id="srLit" d="M0,0" fill="#FFC24D"/>
             </g>
             <g clip-path="url(#clipSL)">
               <path id="slOff" d="M0,0" fill="#FFB020" opacity=".07"/>
-              <path id="slBloom" d="M0,0" fill="#FFB020" opacity=".15"/>
+              <path id="slBloom" d="M0,0" fill="#FFB020" opacity=".16"/>
               <path id="slLit" d="M0,0" fill="#FFBC3C"/>
             </g>
           </g>
@@ -279,31 +300,31 @@
       </g>
 
       <!-- callouts -->
-      <g id="callouts" opacity="0" font-family="var(--mono)">
+      <g id="callouts" opacity="0">
         <g id="coA">
           <path id="coAline" d="M0,0" fill="none" stroke="rgba(62,224,212,.55)" stroke-width="1.2"/>
-          <circle id="coAdot" cx="0" cy="0" r="3.2" fill="none" stroke="rgba(255,176,32,.8)" stroke-width="1.4"/>
+          <circle id="coAdot" cx="0" cy="0" r="3.2" fill="none" stroke="rgba(255,176,32,.85)" stroke-width="1.4"/>
           <text id="coAt1" x="0" y="0" font-size="13" letter-spacing="1.8" fill="#3EE0D4">WINDSHIELD SHADE BAND</text>
-          <text id="coAt2" x="0" y="0" font-size="11" letter-spacing="1.4" fill="#8B9894">TRANSPARENT LED FILM · EMISSIVE</text>
+          <text id="coAt2" x="0" y="0" font-size="11" letter-spacing="1.3" fill="#8B9894">TRANSPARENT LED FILM · EMISSIVE</text>
         </g>
         <g id="coB">
           <path id="coBline" d="M0,0" fill="none" stroke="rgba(62,224,212,.55)" stroke-width="1.2"/>
-          <circle id="coBdot" cx="0" cy="0" r="3.2" fill="none" stroke="rgba(255,176,32,.8)" stroke-width="1.4"/>
+          <circle id="coBdot" cx="0" cy="0" r="3.2" fill="none" stroke="rgba(255,176,32,.85)" stroke-width="1.4"/>
           <text id="coBt1" x="0" y="0" font-size="13" letter-spacing="1.8" fill="#3EE0D4" text-anchor="end">SIDE GLASS STRIP</text>
-          <text id="coBt2" x="0" y="0" font-size="11" letter-spacing="1.4" fill="#8B9894" text-anchor="end">SAME STRING · SMALLER TYPE</text>
+          <text id="coBt2" x="0" y="0" font-size="10.5" letter-spacing="1.2" fill="#8B9894" text-anchor="end">SAME NAME · SMALLER TYPE</text>
         </g>
       </g>
 
-      <!-- greeting beat caption -->
-      <g id="greet" opacity="0" font-family="var(--mono)">
-        <text id="greetT" x="640" y="120" font-size="24" letter-spacing="3" text-anchor="middle"
+      <!-- greeting beat -->
+      <g id="greet" opacity="0">
+        <text id="greetT" x="640" y="118" font-size="24" letter-spacing="3" text-anchor="middle"
               fill="#FFB020" font-weight="700">HELLO JEREMY — WELCOME TO CYBERCAB</text>
-        <text id="greetS" x="640" y="146" font-size="11" letter-spacing="2.4" text-anchor="middle"
+        <text id="greetS" x="640" y="144" font-size="11" letter-spacing="2.4" text-anchor="middle"
               fill="#8B9894">CURB IDENTITY · BAND SETTLED · DOORS UNLOCKED</text>
       </g>
 
-      <!-- in-frame footnote (for the video) -->
-      <g id="foot" font-family="var(--mono)">
+      <!-- in-frame footnote -->
+      <g id="foot">
         <text id="footT1" x="18" y="646" font-size="11.5" letter-spacing="1.3" fill="#8B9894"></text>
         <text id="footT2" x="18" y="666" font-size="11.5" letter-spacing="1.3" fill="#8B9894"></text>
       </g>
@@ -378,23 +399,17 @@
     ' ':'00000,00000,00000,00000,00000,00000,00000',
     '-':'00000,00000,00000,11111,00000,00000,00000',
     '.':'00000,00000,00000,00000,00000,01100,01100',
-    ',':'00000,00000,00000,00000,01100,00100,01000',
     ':':'00000,01100,01100,00000,01100,01100,00000',
-    '/':'00001,00010,00010,00100,01000,01000,10000',
-    '!':'00100,00100,00100,00100,00100,00000,00100',
     '\u00B7':'00000,00000,01100,01100,00000,00000,00000'
   };
   var FONT = {};
-  (function(){
-    for (var k in FSRC) FONT[k] = FSRC[k].split(',');
-  })();
+  (function(){ for (var k in FSRC) FONT[k] = FSRC[k].split(','); })();
 
-  /* text -> array of 7-bit column masks (5 glyph cols + 1 gap) */
-  function cols(txt){
-    var out = [], i, c, g, r, m, ch;
+  /* horizontal marquee: array of 7-bit column masks (bit r = row r) */
+  function colsOf(txt){
+    var out = [], i, c, r, m, g;
     for (i = 0; i < txt.length; i++){
-      ch = txt.charAt(i);
-      g = FONT[ch] || FONT[' '];
+      g = FONT[txt.charAt(i)] || FONT[' '];
       for (c = 0; c < 5; c++){
         m = 0;
         for (r = 0; r < 7; r++) if (g[r].charAt(c) === '1') m |= (1 << r);
@@ -404,33 +419,43 @@
     }
     return out;
   }
+  /* vertical marquee, letters stay upright: array of 5-bit row masks (bit c = column c) */
+  function rowsOf(txt){
+    var out = [], i, r, c, m, g;
+    for (i = 0; i < txt.length; i++){
+      g = FONT[txt.charAt(i)] || FONT[' '];
+      for (r = 0; r < 7; r++){
+        m = 0;
+        for (c = 0; c < 5; c++) if (g[r].charAt(c) === '1') m |= (1 << c);
+        out.push(m);
+      }
+      out.push(0);
+    }
+    return out;
+  }
 
-  var CHAIN_TXT = 'HELLO JEREMY \u00B7 WELCOME TO CYBERCAB \u00B7 JEREMY JUDKINS \u00B7 YOUR RIDE \u00B7 DOORS UNLOCKED \u00B7 ';
-  var CHAIN = cols(CHAIN_TXT);
-  var GREET = cols('HELLO JEREMY');
-  var SIDE  = cols('JEREMY JUDKINS \u00B7 ');
+  var CHAIN = colsOf('HELLO JEREMY \u00B7 WELCOME TO CYBERCAB \u00B7 JEREMY JUDKINS \u00B7 YOUR RIDE \u00B7 DOORS UNLOCKED \u00B7 ');
+  var GREET = colsOf('HELLO JEREMY');
+  var SIDE  = rowsOf('JEREMY JUDKINS \u00B7 ');
 
-  /* ---------- geometry (cab-local units) ---------- */
-  var BAND = { x0:-246, x1:246, y0:-282, yc:-300, y1:-276, rows:7, pitch:6.0, cols:0, half:0 };
-  /* strips: p = start point, d = unit along, e = unit across */
-  var SR = { px:266, py:-284, ax:0.60, ay:0.80, rows:7, pitch:3.9, len:96, n:0 };
-  var SL = { px:-260, py:-276, ax:-0.36, ay:0.93, rows:7, pitch:3.2, len:78, n:0 };
+  /* ---------- geometry, cab-local units ---------- */
+  var BAND = { x0:-206, x1:204, y0:-234, yc:-258, y1:-244, rows:7, pitch:5.6, cols:0 };
+  /* side strips: vertical axis, upright glyphs, 5 columns across */
+  var SR = { px:243, py:-266, len:78, pitch:4.6, cols:5, dir:1 };
+  var SL = { px:-268, py:-244, len:62, pitch:4.0, cols:5, dir:-1 };
 
-  function unit(v){ return v; }
-  function perp(s){ return { x:-s.ay, y:s.ax }; }
-
-  var LOOP  = 14;
+  var LOOP = 14;
   var T_WAKE = 1.05, T_S0 = 1.55, T_H0 = 10.2, T_H1 = 12.4, T_END = 13.62;
-  var T_PARK = 6.1;
-  var SPD_BAND = 58, SPD_SIDE = 26;
-  var CX_FAR = 1100, CX_NEAR = 640;
-  var HORIZON = 404;
-  /* curb line through (-60,694) and (1240,396) */
+  var T_PARK = 6.1, T_SIDE = 1.9;
+  var SPD_BAND = 58, SPD_SIDE = 15;
+  var CX_FAR = 1102, CX_NEAR = 640, HORIZON = 404;
+  var PARK_S = 1.15;
+
   function curbY(x){ return 694 + (x + 60) * (396 - 694) / (1240 + 60); }
-  function scaleAt(y){ return (y - HORIZON) / (curbY(CX_NEAR) - HORIZON); }
+  function scaleAt(y){ return PARK_S * (y - HORIZON) / (curbY(CX_NEAR) - HORIZON); }
 
   /* ---------- dom ---------- */
-  var $ = function(id){ return document.getElementById(id); };
+  function $(id){ return document.getElementById(id); }
   var scene = $('scene'), sceneBox = $('sceneBox');
   var cabWrap = $('cabWrap'), cabScale = $('cabScale');
   var bandGrp = $('bandGrp'), sideGrp = $('sideGrp'), lightbar = $('lightbar');
@@ -439,42 +464,34 @@
   var slLit = $('slLit'), slBloom = $('slBloom'), slOff = $('slOff');
   var sweep = $('sweep'), fade = $('fade'), pool = $('pool'), shadow = $('shadow');
   var callouts = $('callouts'), greet = $('greet');
-
   var vbX = 0, vbY = 0, vbW = 1280, vbH = 720, narrow = false;
+  var LAY = { aX:36, aY:150, bX:1244, bY:268 };
 
   function f1(n){ return Math.round(n * 10) / 10; }
   function circ(x, y, r){
-    var d = f1(r), x0 = f1(x - r), y0 = f1(y);
-    return 'M' + x0 + ',' + y0 + 'a' + d + ',' + d + ' 0 1 0 ' + f1(2 * r) + ',0a' + d + ',' + d + ' 0 1 0 ' + f1(-2 * r) + ',0';
+    var d = f1(r);
+    return 'M' + f1(x - r) + ',' + f1(y) + 'a' + d + ',' + d + ' 0 1 0 ' + f1(2 * r) +
+           ',0a' + d + ',' + d + ' 0 1 0 ' + f1(-2 * r) + ',0';
   }
   function mod(a, n){ return ((a % n) + n) % n; }
   function clamp(v, a, b){ return v < a ? a : (v > b ? b : v); }
   function lerp(a, b, p){ return a + (b - a) * p; }
   function easeOut(p){ return 1 - Math.pow(1 - p, 2.6); }
+  function bandCY(u){ var i = 1 - u; return i * i * BAND.y0 + 2 * u * i * BAND.yc + u * u * BAND.y1; }
 
-  /* band centre line: quadratic through y0 / yc / y1 */
-  function bandCY(u){
-    var iu = 1 - u;
-    return iu * iu * BAND.y0 + 2 * u * iu * BAND.yc + u * u * BAND.y1;
-  }
-
-  /* ---------- static builds (depend on pitch) ---------- */
-  function buildBandStatics(){
+  /* ---------- statics ---------- */
+  function buildBand(){
     var L = BAND.x1 - BAND.x0;
     BAND.cols = Math.floor(L / BAND.pitch);
-    BAND.half = BAND.rows * BAND.pitch / 2;
-    var pad = BAND.pitch * 0.55;
-    var h = BAND.half + pad;
+    var h = BAND.rows * BAND.pitch / 2 + BAND.pitch * 0.6;
     var xm = (BAND.x0 + BAND.x1) / 2;
-    var ycTop = BAND.yc - h, ycBot = BAND.yc + h;
     var panel = 'M' + BAND.x0 + ',' + f1(BAND.y0 - h) +
-                'Q' + xm + ',' + f1(ycTop) + ' ' + BAND.x1 + ',' + f1(BAND.y1 - h) +
+                'Q' + xm + ',' + f1(BAND.yc - h) + ' ' + BAND.x1 + ',' + f1(BAND.y1 - h) +
                 'L' + BAND.x1 + ',' + f1(BAND.y1 + h) +
-                'Q' + xm + ',' + f1(ycBot) + ' ' + BAND.x0 + ',' + f1(BAND.y0 + h) + 'Z';
+                'Q' + xm + ',' + f1(BAND.yc + h) + ' ' + BAND.x0 + ',' + f1(BAND.y0 + h) + 'Z';
     $('bandPanel').setAttribute('d', panel);
     $('clipBandP').setAttribute('d', panel);
-    /* off-state grid */
-    var d = '', c, r, x, u, y, rr;
+    var d = '', c, r, x, u, y;
     for (c = 0; c < BAND.cols; c++){
       x = BAND.x0 + (c + 0.5) * BAND.pitch;
       u = (x - BAND.x0) / L;
@@ -486,39 +503,29 @@
     bandOff.setAttribute('d', d);
   }
 
-  function stripStatics(S, offEl, clipId){
+  function buildStrip(S, offEl, clipId){
     S.n = Math.floor(S.len / S.pitch);
-    var e = perp(S), across = S.rows * S.pitch / 2 + S.pitch * 0.5;
-    var ax = S.ax * S.len, ay = S.ay * S.len;
-    var p1x = S.px - e.x * across, p1y = S.py - e.y * across;
-    var p2x = p1x + ax, p2y = p1y + ay;
-    var p3x = p2x + e.x * across * 2, p3y = p2y + e.y * across * 2;
-    var p4x = p1x + e.x * across * 2, p4y = p1y + e.y * across * 2;
-    document.getElementById(clipId).setAttribute('d',
-      'M' + f1(p1x) + ',' + f1(p1y) + 'L' + f1(p2x) + ',' + f1(p2y) +
-      'L' + f1(p3x) + ',' + f1(p3y) + 'L' + f1(p4x) + ',' + f1(p4y) + 'Z');
-    var d = '', c, r, a, b, x, y;
-    for (c = 0; c < S.n; c++){
-      a = (c + 0.5) * S.pitch;
-      for (r = 0; r < S.rows; r++){
-        b = (r - (S.rows - 1) / 2) * S.pitch;
-        x = S.px + S.ax * a + e.x * b;
-        y = S.py + S.ay * a + e.y * b;
+    var w = S.cols * S.pitch / 2 + S.pitch * 0.55;
+    var x0 = S.px - w, x1 = S.px + w, y0 = S.py, y1 = S.py + S.len;
+    $(clipId).setAttribute('d', 'M' + f1(x0) + ',' + f1(y0) + 'L' + f1(x1) + ',' + f1(y0) +
+      'L' + f1(x1) + ',' + f1(y1) + 'L' + f1(x0) + ',' + f1(y1) + 'Z');
+    var d = '', a, k, x, y;
+    for (a = 0; a < S.n; a++){
+      y = S.py + (a + 0.5) * S.pitch;
+      for (k = 0; k < S.cols; k++){
+        x = S.px + (k - (S.cols - 1) / 2) * S.pitch;
         d += circ(x, y, S.pitch * 0.29);
       }
     }
     offEl.setAttribute('d', d);
   }
 
-  /* ---------- per-frame matrices ---------- */
+  /* ---------- frames ---------- */
   function bandFrame(mode, off){
     var L = BAND.x1 - BAND.x0, n = BAND.cols;
-    var io = Math.floor(off), fr = off - io;
-    var lit = '', bl = '', c, r, m, x, u, y, rr, src, start = 0;
-    if (mode === 'hold'){
-      io = 0; fr = 0;
-      start = Math.floor((n - GREET.length) / 2);
-    }
+    var io = Math.floor(off), fr = off - io, start = 0;
+    var lit = '', bl = '', c, r, m, x, u, y, rr, src, edge;
+    if (mode === 'hold'){ io = 0; fr = 0; start = Math.floor((n - GREET.length) / 2); }
     for (c = 0; c < n; c++){
       if (mode === 'hold'){
         src = c - start;
@@ -529,13 +536,13 @@
       if (!m) continue;
       x = BAND.x0 + (c + 0.5 - fr) * BAND.pitch;
       u = clamp((x - BAND.x0) / L, 0, 1);
-      var edge = 1 - 0.28 * Math.pow(Math.abs(u - 0.5) * 2, 2.2);
+      edge = 1 - 0.26 * Math.pow(Math.abs(u - 0.5) * 2, 2.4);
       for (r = 0; r < BAND.rows; r++){
         if (!((m >> r) & 1)) continue;
         y = bandCY(u) + (r - (BAND.rows - 1) / 2) * BAND.pitch;
-        rr = BAND.pitch * 0.36 * edge;
+        rr = BAND.pitch * 0.37 * edge;
         lit += circ(x, y, rr);
-        bl  += circ(x, y, rr * 2.3);
+        bl  += circ(x, y, rr * 2.2);
       }
     }
     bandLit.setAttribute('d', lit);
@@ -543,20 +550,18 @@
   }
 
   function stripFrame(S, off, litEl, blEl){
-    var e = perp(S), io = Math.floor(off), fr = off - io;
-    var lit = '', bl = '', c, r, m, a, b, x, y, rr;
-    for (c = 0; c < S.n; c++){
-      m = SIDE[mod(io + c, SIDE.length)];
+    var io = Math.floor(off), fr = off - io;
+    var lit = '', bl = '', a, k, m, x, y, rr;
+    for (a = 0; a < S.n; a++){
+      m = SIDE[mod(io + a, SIDE.length)];
       if (!m) continue;
-      a = (c + 0.5 - fr) * S.pitch;
-      for (r = 0; r < S.rows; r++){
-        if (!((m >> r) & 1)) continue;
-        b = (r - (S.rows - 1) / 2) * S.pitch;
-        x = S.px + S.ax * a + e.x * b;
-        y = S.py + S.ay * a + e.y * b;
-        rr = S.pitch * 0.34;
+      y = S.py + (a + 0.5 - fr) * S.pitch;
+      for (k = 0; k < S.cols; k++){
+        if (!((m >> k) & 1)) continue;
+        x = S.px + (k - (S.cols - 1) / 2) * S.pitch;
+        rr = S.pitch * 0.36;
         lit += circ(x, y, rr);
-        bl  += circ(x, y, rr * 2.2);
+        bl  += circ(x, y, rr * 2.1);
       }
     }
     litEl.setAttribute('d', lit);
@@ -568,130 +573,109 @@
     var r = sceneBox.getBoundingClientRect();
     var asp = r.width / Math.max(1, r.height);
     if (!isFinite(asp) || asp <= 0) asp = 16 / 9;
-    asp = clamp(asp, 0.95, 2.4);
-    vbH = 720; vbW = Math.round(720 * asp); vbY = 0;
+    asp = clamp(asp, 1.0, 2.4);
+    vbH = 720; vbY = 0;
+    vbW = Math.round(720 * asp);
     vbX = Math.round((1280 - vbW) / 2);
     scene.setAttribute('viewBox', vbX + ' ' + vbY + ' ' + vbW + ' ' + vbH);
     narrow = vbW < 1040;
+    PARK_S = narrow ? 0.97 : 1.15;
 
-    BAND.pitch = narrow ? 6.7 : 6.0;
-    SR.pitch = narrow ? 4.4 : 3.9;
-    SL.pitch = narrow ? 3.6 : 3.2;
-    buildBandStatics();
-    stripStatics(SR, srOff, 'clipSRP');
-    stripStatics(SL, slOff, 'clipSLP');
+    buildBand();
+    buildStrip(SR, srOff, 'clipSRP');
+    buildStrip(SL, slOff, 'clipSLP');
 
-    fade.setAttribute('x', vbX); fade.setAttribute('y', vbY);
-    fade.setAttribute('width', vbW); fade.setAttribute('height', vbH);
+    fade.setAttribute('x', vbX); fade.setAttribute('width', vbW);
     $('sky').setAttribute('x', vbX); $('sky').setAttribute('width', vbW);
     $('road').setAttribute('x', vbX); $('road').setAttribute('width', vbW);
     $('horizon').setAttribute('x1', vbX); $('horizon').setAttribute('x2', vbX + vbW);
 
-    /* curb hatch */
     var h = '', x;
     for (x = vbX - 40; x < vbX + vbW + 60; x += 54){
       h += '<line x1="' + x + '" y1="' + f1(curbY(x) + 22) + '" x2="' + (x - 26) + '" y2="' + f1(curbY(x) + 52) + '"/>';
     }
     $('curbHatch').innerHTML = h;
     $('curbTag').setAttribute('x', vbX + 16);
-    $('curbTag').setAttribute('y', vbY + vbH - 16);
+    $('curbTag').setAttribute('y', vbH - 16);
+    $('curbTag').setAttribute('font-size', narrow ? 13 : 11);
 
-    /* footnote in frame */
-    var f1t, f2t;
+    var t1, t2;
     if (narrow){
-      f1t = 'PROD: FIRST NAME OR 4-CHAR CODE + COLOUR';
-      f2t = '~30 S EST · NEVER A LEGAL NAME · JEREMY DEMO';
+      t1 = 'PROD CURB ID = FIRST NAME OR 4-CHAR CODE + COLOUR';
+      t2 = '~30 S EST · NEVER A LEGAL NAME · DEMO FOR JEREMY';
     } else {
-      f1t = 'PRODUCTION CURB ID = FIRST NAME OR A 4-CHARACTER CODE + COLOUR, ~30 S EST, DOOR-OPEN KILLS IT.';
-      f2t = 'NEVER A FULL LEGAL NAME. THIS FULL-NAME VERSION IS A DEMO FOR JEREMY.';
+      t1 = 'PRODUCTION CURB ID = FIRST NAME OR A 4-CHARACTER CODE + COLOUR, ~30 S EST, DOOR-OPEN KILLS IT.';
+      t2 = 'NEVER A FULL LEGAL NAME. THIS FULL-NAME VERSION IS A DEMO FOR JEREMY.';
     }
-    var ft1 = $('footT1'), ft2 = $('footT2');
-    ft1.textContent = f1t; ft2.textContent = f2t;
-    ft1.setAttribute('x', vbX + 16); ft1.setAttribute('y', vbY + vbH - 58);
-    ft2.setAttribute('x', vbX + 16); ft2.setAttribute('y', vbY + vbH - 40);
-    ft1.setAttribute('font-size', narrow ? 10 : 11.5);
-    ft2.setAttribute('font-size', narrow ? 10 : 11.5);
+    var f1e = $('footT1'), f2e = $('footT2');
+    f1e.textContent = t1; f2e.textContent = t2;
+    f1e.setAttribute('x', vbX + 16); f1e.setAttribute('y', vbH - 60);
+    f2e.setAttribute('x', vbX + 16); f2e.setAttribute('y', vbH - 40);
+    f1e.setAttribute('font-size', narrow ? 12.5 : 11.5);
+    f2e.setAttribute('font-size', narrow ? 12.5 : 11.5);
 
-    /* greeting caption */
-    var gs = narrow ? 17 : 24;
-    $('greetT').setAttribute('font-size', gs);
-    $('greetT').setAttribute('letter-spacing', narrow ? 1.4 : 3);
+    $('greetT').setAttribute('font-size', narrow ? 20 : 24);
+    $('greetT').setAttribute('letter-spacing', narrow ? 1.5 : 3);
     $('greetT').setAttribute('x', vbX + vbW / 2);
-    $('greetT').setAttribute('y', vbY + (narrow ? 54 : 118));
-    $('greetS').setAttribute('font-size', narrow ? 9 : 11);
-    $('greetS').setAttribute('letter-spacing', narrow ? 1.2 : 2.4);
+    $('greetT').setAttribute('y', narrow ? 96 : 118);
+    $('greetS').setAttribute('font-size', narrow ? 11 : 11);
+    $('greetS').setAttribute('letter-spacing', narrow ? 1.4 : 2.4);
     $('greetS').setAttribute('x', vbX + vbW / 2);
-    $('greetS').setAttribute('y', vbY + (narrow ? 74 : 144));
+    $('greetS').setAttribute('y', narrow ? 120 : 144);
 
-    /* callout label anchors */
-    var aX = vbX + 18, aY = vbY + (narrow ? 112 : 150);
+    var aX = vbX + 16, aY = narrow ? 40 : 158;
     $('coAt1').setAttribute('x', aX); $('coAt1').setAttribute('y', aY);
-    $('coAt2').setAttribute('x', aX); $('coAt2').setAttribute('y', aY + (narrow ? 15 : 19));
-    $('coAt1').setAttribute('font-size', narrow ? 10.5 : 13);
-    $('coAt2').setAttribute('font-size', narrow ? 9 : 11);
-    var bX = vbX + vbW - 18, bY = vbY + (narrow ? 250 : 268);
+    $('coAt2').setAttribute('x', aX); $('coAt2').setAttribute('y', aY + (narrow ? 21 : 19));
+    $('coAt1').setAttribute('font-size', narrow ? 14 : 13);
+    $('coAt2').setAttribute('font-size', narrow ? 11.5 : 11);
+    var bX = vbX + vbW - 16, bY = narrow ? 610 : 286;
     $('coBt1').setAttribute('x', bX); $('coBt1').setAttribute('y', bY);
-    $('coBt2').setAttribute('x', bX); $('coBt2').setAttribute('y', bY + (narrow ? 15 : 19));
-    $('coBt1').setAttribute('font-size', narrow ? 10.5 : 13);
-    $('coBt2').setAttribute('font-size', narrow ? 9 : 11);
-    LAY = { aX:aX, aY:aY, bX:bX, bY:bY };
+    $('coBt2').setAttribute('x', bX); $('coBt2').setAttribute('y', bY + (narrow ? 21 : 19));
+    $('coBt1').setAttribute('font-size', narrow ? 14 : 13);
+    $('coBt2').setAttribute('font-size', narrow ? 11.5 : 10.5);
+    LAY = { aX:aX, aY:aY, bX:bX, bY:bY, up:narrow };
   }
-  var LAY = { aX:36, aY:150, bX:1244, bY:268 };
 
   /* ---------- render(t) ---------- */
   function render(t){
     t = mod(t, LOOP);
 
-    /* approach */
     var p = t < T_PARK ? easeOut(clamp(t / T_PARK, 0, 1)) : 1;
     var cx = lerp(CX_FAR, CX_NEAR, p);
     var cy = curbY(cx);
     var s = scaleAt(cy);
     cabWrap.setAttribute('transform', 'translate(' + f1(cx) + ',' + f1(cy) + ')');
     cabScale.setAttribute('transform', 'scale(' + (Math.round(s * 1000) / 1000) + ')');
-    shadow.setAttribute('rx', f1(330 * s)); shadow.setAttribute('ry', f1(30 * s));
+    cabWrap.setAttribute('opacity', f1(clamp(0.45 + 0.55 * p, 0, 1)));
+    shadow.setAttribute('rx', f1(340 * s)); shadow.setAttribute('ry', f1(26 * s));
     shadow.setAttribute('cy', f1(-4 * s));
-    cabWrap.setAttribute('opacity', f1(clamp(0.42 + 0.58 * p, 0, 1)));
 
-    /* light bar wakes up */
     var lb = 0;
-    if (t > 0.85){
-      lb = clamp((t - 0.85) / 0.5, 0, 1);
-      if (t < 1.35){
-        var fl = Math.sin(t * 61) * 0.5 + 0.5;
-        lb *= 0.35 + 0.65 * fl;
-      }
+    if (t > 0.8){
+      lb = clamp((t - 0.8) / 0.5, 0, 1);
+      if (t < 1.32) lb *= 0.3 + 0.7 * (Math.sin(t * 63) * 0.5 + 0.5);
     }
     lightbar.setAttribute('opacity', f1(clamp(lb, 0, 1)));
-    pool.setAttribute('opacity', f1(clamp(lb * p * 0.9, 0, 1)));
+    pool.setAttribute('opacity', f1(clamp(lb * p * 0.85, 0, 1)));
     pool.setAttribute('rx', f1(300 * s)); pool.setAttribute('ry', f1(58 * s));
     pool.setAttribute('cy', f1(30 * s));
 
-    /* band */
-    var bandOn = 0, mode = 'scroll', off = 0, sw = 0;
+    var bandOn = 0, mode = 'scroll', off = 0;
     if (t >= T_WAKE){
       bandOn = clamp((t - T_WAKE) / 0.35, 0, 1);
-      if (t < T_S0){
-        mode = 'wake';
-        sw = 1;
-      } else if (t < T_H0){
-        off = (t - T_S0) * SPD_BAND;
-      } else if (t < T_H1){
-        mode = 'hold';
-      } else {
-        off = (T_H0 - T_S0) * SPD_BAND + (t - T_H1) * SPD_BAND;
-      }
+      if (t < T_S0) mode = 'wake';
+      else if (t < T_H0) off = (t - T_S0) * SPD_BAND;
+      else if (t < T_H1) mode = 'hold';
+      else off = (T_H0 - T_S0) * SPD_BAND + (t - T_H1) * SPD_BAND;
     }
     if (t > T_END) bandOn *= clamp(1 - (t - T_END) / 0.3, 0, 1);
     bandGrp.setAttribute('opacity', f1(clamp(bandOn, 0, 1)));
 
     if (mode === 'wake'){
-      bandLit.setAttribute('d', 'M0,0');
-      bandBloom.setAttribute('d', 'M0,0');
-      bandOff.setAttribute('opacity', f1(0.085 + 0.34 * clamp((t - T_WAKE) / 0.4, 0, 1)));
-      var sp = clamp((t - T_WAKE) / (T_S0 - T_WAKE), 0, 1);
+      bandLit.setAttribute('d', 'M0,0'); bandBloom.setAttribute('d', 'M0,0');
+      bandOff.setAttribute('opacity', f1(0.085 + 0.32 * clamp((t - T_WAKE) / 0.4, 0, 1)));
       sweep.setAttribute('opacity', 1);
-      sweep.setAttribute('x', f1(lerp(BAND.x0 - 120, BAND.x1 + 10, sp)));
+      sweep.setAttribute('x', f1(lerp(BAND.x0 - 120, BAND.x1 + 10, clamp((t - T_WAKE) / (T_S0 - T_WAKE), 0, 1))));
     } else {
       sweep.setAttribute('opacity', 0);
       bandOff.setAttribute('opacity', 0.085);
@@ -701,42 +685,37 @@
       bandBloom.setAttribute('opacity', f1(0.17 * pulse + (mode === 'hold' ? 0.07 : 0)));
     }
 
-    /* side strips */
     var sideOn = 0;
-    if (t >= 1.85){
-      sideOn = clamp((t - 1.85) / 0.4, 0, 1);
-      var so = (t - 1.85) * SPD_SIDE;
+    if (t >= T_SIDE){
+      sideOn = clamp((t - T_SIDE) / 0.4, 0, 1);
+      var so = (t - T_SIDE) * SPD_SIDE;
       stripFrame(SR, -so, srLit, srBloom);
       stripFrame(SL, so, slLit, slBloom);
     }
     if (t > T_END) sideOn *= clamp(1 - (t - T_END) / 0.3, 0, 1);
     sideGrp.setAttribute('opacity', f1(clamp(sideOn, 0, 1)));
 
-    /* callouts, tracking the band + near side glass */
     var co = 0;
     if (t > 6.5) co = clamp((t - 6.5) / 0.6, 0, 1);
     if (t > 12.9) co *= clamp(1 - (t - 12.9) / 0.5, 0, 1);
     callouts.setAttribute('opacity', f1(clamp(co, 0, 1)));
     if (co > 0.001){
-      var tax = cx + s * (BAND.x0 + 46), tay = cy + s * (bandCY(0.1) + 2);
+      var tax = cx + s * (BAND.x0 + 40), tay = cy + s * (bandCY(0.1) - 2);
       $('coAdot').setAttribute('cx', f1(tax)); $('coAdot').setAttribute('cy', f1(tay));
-      $('coAline').setAttribute('d', 'M' + f1(LAY.aX + 4) + ',' + f1(LAY.aY + 8) +
+      $('coAline').setAttribute('d', 'M' + f1(LAY.aX + 4) + ',' + f1(LAY.aY + 10) +
         'L' + f1(LAY.aX + 4) + ',' + f1(tay - 26) + 'L' + f1(tax - 6) + ',' + f1(tay));
-      var e = perp(SR);
-      var tbx = cx + s * (SR.px + SR.ax * SR.len * 0.55 + e.x * 2);
-      var tby = cy + s * (SR.py + SR.ay * SR.len * 0.55 + e.y * 2);
+      var tbx = cx + s * (SR.px + 4), tby = cy + s * (SR.py + SR.len * 0.5);
       $('coBdot').setAttribute('cx', f1(tbx)); $('coBdot').setAttribute('cy', f1(tby));
-      $('coBline').setAttribute('d', 'M' + f1(LAY.bX - 4) + ',' + f1(LAY.bY + 8) +
-        'L' + f1(LAY.bX - 4) + ',' + f1(tby + 18) + 'L' + f1(tbx + 7) + ',' + f1(tby));
+      var vy = LAY.up ? (tby + 34) : (tby + 18);
+      $('coBline').setAttribute('d', 'M' + f1(LAY.bX - 4) + ',' + f1(LAY.bY + (LAY.up ? -16 : 10)) +
+        'L' + f1(LAY.bX - 4) + ',' + f1(vy) + 'L' + f1(tbx + 7) + ',' + f1(tby + 4));
     }
 
-    /* greeting beat */
     var g = 0;
     if (t > T_H0 - 0.05) g = clamp((t - T_H0 + 0.05) / 0.45, 0, 1);
     if (t > T_H1 - 0.3) g *= clamp(1 - (t - T_H1 + 0.3) / 0.4, 0, 1);
     greet.setAttribute('opacity', f1(clamp(g, 0, 1)));
 
-    /* loop seam */
     var fo = 0;
     if (t < 0.34) fo = 1 - t / 0.34;
     else if (t > LOOP - 0.34) fo = (t - (LOOP - 0.34)) / 0.34;
@@ -750,28 +729,25 @@
   var frozen = (tq !== null && tq !== '');
   var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  function boot(){
-    layout();
-    if (frozen){ render(parseFloat(tq) || 0); return; }
-    if (reduce){ render(11.0); return; }
+  function paint(){
+    if (frozen) render(parseFloat(tq) || 0);
+    else if (reduce) render(11.0);
+  }
+  layout();
+  if (frozen || reduce){ paint(); }
+  else {
     var t0 = performance.now();
-    (function tick(now){
+    requestAnimationFrame(function tick(now){
       render(((now - t0) / 1000) % LOOP);
       requestAnimationFrame(tick);
-    })(t0);
+    });
   }
-
   var rl = 0;
   window.addEventListener('resize', function(){
     clearTimeout(rl);
-    rl = setTimeout(function(){
-      layout();
-      if (frozen) render(parseFloat(tq) || 0);
-      else if (reduce) render(11.0);
-    }, 90);
+    rl = setTimeout(function(){ layout(); paint(); }, 90);
   });
 
-  boot();
   window.render = render;
   window.__ready = true;
 })();
